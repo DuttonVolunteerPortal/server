@@ -10,6 +10,15 @@ var password = "bjarne";
 var APP_PATH = path.join(__dirname, 'dist');
 
 
+/*
+Handy CURL commands:
+
+curl -X PUT http://localhost:3000/api/business -d '{"name" : "Kastner Konstruction", "owner" Kastner Family", "service" : "Konstruction - We make easy jobs look hard.", "email" : "me@somedomain.com", "address" : "8888 No Street Nowhere, MI 00000", "phone" : "444-444-4444" }' -H 'Content-Type: application/json'
+
+
+*/
+
+
 
 app.set('port', (process.env.PORT || 3000));
 app.use('/', express.static(APP_PATH));
