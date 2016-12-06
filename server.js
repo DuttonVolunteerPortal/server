@@ -98,6 +98,21 @@ console.log(emailTokens);//for debugging
 })
 
 
+/*get a business by providing its name address
+returns an array with (hopefully) one element.
+I'me using the prefix of the owner's personal email address as a way to identify the business.
+This way we can update the name later if necessary and it gives us a short way to refer to the business.
+
+*/
+app.get('/api/business/:ownerEmail', function(req, res) {
+  //split prefix off of email address
+  var emailTokens = req.params.ownerEmail.split("@");
+  console.log(emailTokens);//for debugging
+  db.collection("business").find({ownerID: emailTokens[0]}).toArray(function(err, businesses) {
+    assert.equal(err, null);
+    res.json(businesses);
+  });
+})
 
 
 
