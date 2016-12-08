@@ -8,7 +8,7 @@ var assert = require('assert');
 var db;
 var password = "bjarne";
 var APP_PATH = path.join(__dirname, 'dist');
-
+var $  = require ('jquery');
 
 /*
 Handy CURL commands:
@@ -82,45 +82,47 @@ app.put('/api/volunteer', function(req, res) {
   //split prefix off of email address
   var emailTokens = req.body.email.split("@");
   console.log(emailTokens);//for debugging
-
-
-//remove the user from all jobs they are currently in.
+  //remove the user from all jobs they are currently in.
+  // leanred about deferreds here:  http://stackoverflow.com/questions/24655851/javascript-function-wait-until-another-function-to-finish
+  // var dfrd1 = $.Deferred();
   db.collection("job").updateMany({ workers: { $in: [req.body.volunteerName] } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
     if (err) throw err;
     console.log("Removed this person from all jobs")
+    dfrd1.resolve();
     // console.log(result);//for debugging purposes
-  });
+  }.done(function(){
 
-
-  // add the volunteer to the jobs they want.  TODO: figure out how to do this in one operation, instead of multiple operations.
-  // for (var i=0; i < myjobs.length; i++) {
-  //   db.collection("job").updateOne({title: myjobs[i]}, {$push: {workers: req.body.volunteerName}}, function(err, result){
-  //     if (err) throw err;
-  //     // console.log(result); //for debugging purposes
-  //   });
-  // }
-
-
-
-console.log("Jobs I want:  \n");
-console.log(jobsIwant);
-  db.collection("job").updateMany({ title: { $in: jobsIwant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
-    if (err) throw err;
+    console.log("Jobs I want:  \n");
+    console.log(jobsIwant);
+    db.collection("job").updateMany({ title: { $in: jobsIwant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
+      if (err) throw err;
       console.log("Added this person to their jobs.")
-    // console.log(result);//for debugging purposes
-  });
+      // console.log(result);//for debugging purposes
+    });
+  }
+));
 
-  // db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
+
+// add the volunteer to the jobs they want.  TODO: figure out how to do this in one operation, instead of multiple operations.
+// for (var i=0; i < myjobs.length; i++) {
+//   db.collection("job").updateOne({title: myjobs[i]}, {$push: {workers: req.body.volunteerName}}, function(err, result){
+//     if (err) throw err;
+//     // console.log(result); //for debugging purposes
+//   });
+// }
+
+
+// db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
 
 //update the volunteer's info.
-  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIwant: jobsIwant}, {upsert: true}, function(err, result){
-    console.log(req.body.email);//logging output for debugging purposes
-    console.log(req.body.volunteerName);
-    console.log(req.body.jobsIwant);
+db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIwant: jobsIwant}, {upsert: true}, function(err, result){
+  console.log(req.body.email);//logging output for debugging purposes
+  console.log(req.body.volunteerName);
+  console.log(req.body.jobsIwant);
 
-    if (err) throw err;
-    res.json(200);
-  });
+  if (err) throw err;
+  res.json(200);
+});
 })
 
 
