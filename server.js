@@ -76,15 +76,47 @@ If the volunteer already exists, all fields are changed to match the values give
 
 This means that even if you update one filed, you must send back the original values of all the other fields.
 */
+
 app.put('/api/volunteer', function(req, res) {
-  var myjobs = req.body.jobsIwant;
-//split prefix off of email address
-var emailTokens = req.body.email.split("@");
-console.log(emailTokens);//for debugging
-  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIwant: myjobs}, {upsert: true}, function(err, result){
-console.log(req.body.email);//logging output for debugging purposes
-console.log(req.body.volunteerName);
-console.log(req.body.jobsIwant);
+  var jobsIwant = req.body.jobsIwant;
+  //split prefix off of email address
+  var emailTokens = req.body.email.split("@");
+  console.log(emailTokens);//for debugging
+
+
+//remove the user from all jobs they are currently in.
+  db.collection("job").updateMany({ workers: { $in: [req.body.volunteerName] } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
+    if (err) throw err;
+    console.log("Removed this person from all jobs")
+    // console.log(result);//for debugging purposes
+  });
+
+
+  // add the volunteer to the jobs they want.  TODO: figure out how to do this in one operation, instead of multiple operations.
+  // for (var i=0; i < myjobs.length; i++) {
+  //   db.collection("job").updateOne({title: myjobs[i]}, {$push: {workers: req.body.volunteerName}}, function(err, result){
+  //     if (err) throw err;
+  //     // console.log(result); //for debugging purposes
+  //   });
+  // }
+
+
+
+console.log("Jobs I want:  \n");
+console.log(jobsIwant);
+  db.collection("job").updateMany({ title: { $in: jobsIwant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
+    if (err) throw err;
+      console.log("Added this person to their jobs.")
+    // console.log(result);//for debugging purposes
+  });
+
+  // db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
+
+//update the volunteer's info.
+  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIwant: jobsIwant}, {upsert: true}, function(err, result){
+    console.log(req.body.email);//logging output for debugging purposes
+    console.log(req.body.volunteerName);
+    console.log(req.body.jobsIwant);
 
     if (err) throw err;
     res.json(200);
@@ -92,14 +124,15 @@ console.log(req.body.jobsIwant);
 })
 
 
-/*get a volunteer by providing their email address
 
+
+/*get a volunteer by providing their email address
 returns an array with (hopefully) one element.
 */
 app.get('/api/volunteer/:email', function(req, res) {
-//split prefix off of email address
-var emailTokens = req.params.email.split("@");
-console.log(emailTokens);//for debugging
+  //split prefix off of email address
+  var emailTokens = req.params.email.split("@");
+  console.log(emailTokens);//for debugging
   db.collection("volunteers").find({id: emailTokens[0]}).toArray(function(err, volunteers) {
     assert.equal(err, null);
     res.json(volunteers);
