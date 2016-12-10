@@ -78,8 +78,6 @@ This means that even if you update one field, you must send back the original va
 
 app.put('/api/volunteer', function(req, res) {
   var jobsIWant = req.body.jobsIWant;
-  var jobsIWantToRemove = req.body.jobsIWantToRemove;
-  var jobsIWantToAdd = req.body.jobsIWantToAdd;
   //split prefix off of email address
   var emailTokens = req.body.email.split("@");
   console.log(emailTokens);//for debugging purposes
@@ -93,9 +91,6 @@ app.put('/api/volunteer', function(req, res) {
   db.collection("job").updateMany({ title: { $in: jobsIWant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
     if (err) throw err;
   });
-// db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
-
-
 //update the volunteer's info.
   db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIWant: jobsIWant}, {upsert: true}, function(err, result){
     console.log(req.body.email);//logging output for debugging purposes
