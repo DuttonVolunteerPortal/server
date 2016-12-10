@@ -77,7 +77,7 @@ This means that even if you update one field, you must send back the original va
 */
 
 app.put('/api/volunteer', function(req, res) {
-  var jobsIwant = req.body.jobsIwant;
+  var jobsIWant = req.body.jobsIWant;
   var jobsIWantToRemove = req.body.jobsIWantToRemove;
   var jobsIWantToAdd = req.body.jobsIWantToAdd;
   //split prefix off of email address
@@ -95,11 +95,12 @@ app.put('/api/volunteer', function(req, res) {
   });
 // db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
 
+
 //update the volunteer's info.
-  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIwant: jobsIwant}, {upsert: true}, function(err, result){
+  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIWant: jobsIWant}, {upsert: true}, function(err, result){
     console.log(req.body.email);//logging output for debugging purposes
     console.log(req.body.volunteerName);
-    console.log(req.body.jobsIwant);
+    console.log(req.body.jobsIWant);
 
     if (err) throw err;
     res.json(200);
@@ -123,6 +124,16 @@ app.get('/api/volunteer/:email', function(req, res) {
 })
 
 
+
+app.get('/api/volunteer/:email/jobsIwant', function(req, res) {
+  //split prefix off of email address
+  var emailTokens = req.params.email.split("@");
+  console.log(emailTokens);//for debugging
+  db.collection("volunteers").find({id: emailTokens[0]}).toArray(function(err, volunteers) {
+    assert.equal(err, null);
+    res.json(volunteers);
+  });
+})
 
 
 /*get a business by providing its name address
