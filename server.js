@@ -85,12 +85,12 @@ app.put('/api/volunteer', function(req, res) {
   console.log(emailTokens);//for debugging purposes
 
 //remove the volunteer from the jobs they unchecked.
-  db.collection("job").updateMany({ title: { $in: jobsIWantToRemove } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
+  db.collection("job").updateMany({ title: { $nin: jobsIWant } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
     if (err) throw err;
   });
 
 //add the volunteer to the jobs they checked
-  db.collection("job").updateMany({ title: { $in: jobsIWantToAdd } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
+  db.collection("job").updateMany({ title: { $in: jobsIWant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
     if (err) throw err;
   });
 // db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
