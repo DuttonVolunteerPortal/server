@@ -73,44 +73,27 @@ app.put('/api/business', function(req, res) {
 /*add or update a volunteer
 If the volunteer (based on the id field, the prefix of their email address) does not exist, they are created.
 If the volunteer already exists, all fields are changed to match the values give.
-
-This means that even if you update one filed, you must send back the original values of all the other fields.
+This means that even if you update one field, you must send back the original values of all the other fields.
 */
 
 app.put('/api/volunteer', function(req, res) {
   var jobsIwant = req.body.jobsIwant;
+  var jobsIWantToRemove = req.body.jobsIWantToRemove;
+  var jobsIWantToAdd = req.body.jobsIWantToAdd;
   //split prefix off of email address
   var emailTokens = req.body.email.split("@");
-  console.log(emailTokens);//for debugging
+  console.log(emailTokens);//for debugging purposes
 
-
-//remove the user from all jobs they are currently in.
-  db.collection("job").updateMany({ workers: { $in: [req.body.volunteerName] } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
+//remove the volunteer from the jobs they unchecked.
+  db.collection("job").updateMany({ title: { $in: jobsIWantToRemove } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
     if (err) throw err;
-    console.log("Removed this person from all jobs")
-    // console.log(result);//for debugging purposes
   });
 
-
-  // add the volunteer to the jobs they want.  TODO: figure out how to do this in one operation, instead of multiple operations.
-  // for (var i=0; i < myjobs.length; i++) {
-  //   db.collection("job").updateOne({title: myjobs[i]}, {$push: {workers: req.body.volunteerName}}, function(err, result){
-  //     if (err) throw err;
-  //     // console.log(result); //for debugging purposes
-  //   });
-  // }
-
-
-
-console.log("Jobs I want:  \n");
-console.log(jobsIwant);
-  db.collection("job").updateMany({ title: { $in: jobsIwant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
+//add the volunteer to the jobs they checked
+  db.collection("job").updateMany({ title: { $in: jobsIWantToAdd } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
     if (err) throw err;
-      console.log("Added this person to their jobs.")
-    // console.log(result);//for debugging purposes
   });
-
-  // db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
+// db.job.updateOne({title: job}, {$push: {workers: 'req.body.volunteerName'}});
 
 //update the volunteer's info.
   db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIwant: jobsIwant}, {upsert: true}, function(err, result){
@@ -138,6 +121,8 @@ app.get('/api/volunteer/:email', function(req, res) {
     res.json(volunteers);
   });
 })
+
+
 
 
 /*get a business by providing its name address
