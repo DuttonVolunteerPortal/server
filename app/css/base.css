@@ -7,6 +7,18 @@ body {
     padding: 30px;
 }
 
+input[type="text"] {
+    width: 150px;
+    height: 30px;
+    margin-bottom: 10px;
+}
+
+input[type="submit"] {
+    width: auto;
+    max-width: 1280px;
+    display: inline; 
+}
+
 a {
     color: #4183c4;
     text-decoration: none;
