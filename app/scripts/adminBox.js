@@ -1,8 +1,9 @@
 import React from 'react';
 
 import $ from 'jquery';
-import JobList from './adminVolunteerJobList.js'
-import JobForm from './adminForm.js'
+import JobList from './adminVolunteerJobList.js';
+import JobForm from './adminForm.js';
+import {API_URL, POLL_INTERVAL} from './global';
 
 module.exports = React.createClass({
 
@@ -13,7 +14,7 @@ module.exports = React.createClass({
   // Use to AJAX to get jobs from the server
   loadJobsFromServer: function() {
       $.ajax({
-          url: this.props.url,
+          url: API_URL,
           dataType: 'json',
           cache: false,
       })
@@ -30,7 +31,7 @@ module.exports = React.createClass({
     var newJobs = jobs.concat([job]);
     this.setState({data: newJobs});
     $.ajax({
-      url: this.props.url,
+      url: API_URL,
       dataType: 'json',
       type: 'POST',
       data: job,

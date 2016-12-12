@@ -18,6 +18,7 @@ module.exports = React.createClass({
           {this.props.title}
         </h2>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
+        <Link to={'/' + this.props.id}>Edit</Link>
         <VolunteerList data={this.props.workers} />
       </div>
     );
