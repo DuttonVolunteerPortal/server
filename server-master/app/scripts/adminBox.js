@@ -2,6 +2,7 @@ import React from 'react';
 
 import $ from 'jquery';
 import JobList from './adminVolunteerJobList.js'
+import JobForm from './adminForm.js'
 
 module.exports = React.createClass({
 
@@ -23,6 +24,26 @@ module.exports = React.createClass({
           console.error(this.props.url, status, err.toString());
       }.bind(this));
   },
+  //the following method is a TODO, currently is just copied lab code
+  handleJobSubmit: function(job) {
+    var jobs = this.state.data;
+    var newJobs = jobs.concat([job]);
+    this.setState({data: newJobs});
+    $.ajax({
+      url: this.props.url,
+      dataType: 'json',
+      type: 'POST',
+      data: job,
+      success: function(data) {
+        this.setState({data: data});
+      }.bind(this),
+      error: function(xhr, status, err) {
+        this.setState({data: jobs});
+        console.error(this.props.url, status, err.toString());
+      }.bind(this)
+    });
+  },
+
 
     // Called automatically by React after a component is rendered for the first time
     componentDidMount: function() {
@@ -35,6 +56,7 @@ module.exports = React.createClass({
       <div className="adminBox">
         <h1>Volunteering Jobs</h1>
         <JobList data={this.state.data} />
+        <JobForm onJobSubmit={this.handleJobSubmit} />
       </div>
     );
   }

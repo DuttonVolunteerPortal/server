@@ -9,8 +9,8 @@ module.exports = React.createClass({
 	render: function() {
         var jobNodes = this.props.data.map(function(job) {
             return (
-                <JobCategory jobname={job.title}>
-                    {job.title}
+                <JobCategory id={job.id} title={job.title} key={job.id}>
+                    {job.description}
                 </JobCategory>
             );
         });

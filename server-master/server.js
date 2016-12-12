@@ -34,6 +34,21 @@ app.get('/api/jobs', function(req, res) {
     });
 });
 
+app.post('/api/jobs', function(req, res) {
+        var newJob = {
+            title: req.body.volunteer_job,
+            description: req.body.volunteer_description,
+            workers: []
+        };
+        db.collection("job").insertOne(newJob, function(err, result) {
+        if (err) throw err;
+        db.collection("job").find({}).toArray(function(err, docs) {
+            if (err) throw err;
+            res.json(docs);
+        });
+    });
+})
+
 app.use('*', express.static(APP_PATH));
 
 app.listen(app.get('port'), function() {
