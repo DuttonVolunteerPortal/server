@@ -30,7 +30,7 @@ module.exports = {
                 'NODE_ENV': JSON.stringify('production')
             }
         }),
-    new HtmlWebpackPlugin({template: __dirname + "/app/volunteer.tmpl.html"}),
+    new HtmlWebpackPlugin({template: __dirname + "/app/volunteer.tmpl.html", filename: "volunteer.html"}),
     new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin(),
         new ExtractTextPlugin("[name]-[hash].css")
