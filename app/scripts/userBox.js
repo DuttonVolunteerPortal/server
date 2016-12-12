@@ -7,7 +7,7 @@ import BusinessInfo from './userBusinessInfo.js'
 
 module.exports = React.createClass({
   getInitialState: function(){
-    return {data: [{title: "Baker"}]};
+    return {data: [{title: "Baker"}, {title: "Classroom Help"}, {title: "Bulk Mailing"}, {title: "Classroom Care Parent"}]};
   },
   componentDidMount: function() {
   },
