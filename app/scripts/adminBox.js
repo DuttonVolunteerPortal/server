@@ -1,8 +1,10 @@
 import React from 'react';
-
 import $ from 'jquery';
-import JobList from './adminVolunteerJobList.js'
-import JobForm from './adminForm.js'
+
+import JobList from './adminVolunteerJobList.js';
+import JobForm from './adminForm.js';
+
+import {API_URL, POLL_INTERVAL} from './global';
 
 module.exports = React.createClass({
 
@@ -13,7 +15,7 @@ module.exports = React.createClass({
   // Use to AJAX to get jobs from the server
   loadJobsFromServer: function() {
       $.ajax({
-          url: this.props.url,
+          url: API_URL,
           dataType: 'json',
           cache: false,
       })
@@ -30,25 +32,24 @@ module.exports = React.createClass({
     var newJobs = jobs.concat([job]);
     this.setState({data: newJobs});
     $.ajax({
-      url: this.props.url,
+      url: API_URL,
       dataType: 'json',
       type: 'POST',
       data: job,
-      success: function(data) {
+    })
+      .done(function(data){
         this.setState({data: data});
-      }.bind(this),
-      error: function(xhr, status, err) {
+      }.bind(this))
+      .fail(function(xhr, status, err) {
         this.setState({data: jobs});
         console.error(this.props.url, status, err.toString());
-      }.bind(this)
-    });
+      }.bind(this));
   },
-
 
     // Called automatically by React after a component is rendered for the first time
     componentDidMount: function() {
         this.loadJobsFromServer();
-        setInterval(this.loadJobsFromServer, this.props.pollInterval);
+        setInterval(this.loadJobsFromServer, POLL_INTERVAL);
     },
 
   render: function() {
