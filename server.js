@@ -9,6 +9,7 @@ var db;
 var spawn = require('child_process').spawn;
 var password = "bjarne";
 var APP_PATH = path.join(__dirname, 'dist');
+var EXPORT_PATH = path.join(__dirname);
 
 
 /*
@@ -152,11 +153,19 @@ app.get('/api/business/:ownerEmail', function(req, res) {
 })
 
 
+/*get the list of contact information as a CSV file for all the people who signed up for a certain job*/
 
 /*code for spawing process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben"*/
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
-  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '-d', 'duttonportal', '-c', 'volunteers', '-u', 'cs336', '-p', 'bjarne', '--type=csv', '-f', 'email']);
+var jobNameArray = []
+jobNameArray.push(req.params.jobName);
+console.log(jobNameArray);
+// var queryString = '{ jobsIWant: { $in: [" + '"' + req.params.jobName + '"' +  "] } }';
+var queryString = '{ jobsIWant: { $in: ["'+ req.params.jobName +'"] } }';
+console.log(req.params.jobName);
+console.log(queryString);
+  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '--db', 'duttonportal', '-c', 'volunteers', '-u', 'cs336', '-p', password, '-q', '{ jobsIWant: { $in: ["HVAC"] } }', '--fields', 'email']);
 console.log('after spawn');
 
   res.set('Content-Type', 'text/plain');
@@ -165,6 +174,7 @@ console.log('after spawn');
     if (data) {
       console.log("Should have received data");
       res.send(data.toString());
+      console.log("sent data");
     } else {
       res.send('mongoexport returned no data');
     }
