@@ -161,32 +161,13 @@ console.log("going to spawn process now");
 var jobNameArray = []
 jobNameArray.push(req.params.jobName);
 console.log(jobNameArray);
-// var queryString = '{ jobsIWant: { $in: [" + '"' + req.params.jobName + '"' +  "] } }';
 var queryString = '{ jobsIWant: { $in: ["'+ req.params.jobName +'"] } }';
 console.log(req.params.jobName);
 console.log(queryString);
-  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '--db', 'duttonportal', '-c', 'volunteers', '-u', 'cs336', '-p', password, '-q', '{ jobsIWant: { $in: ["HVAC"] } }', '--fields', 'email']);
+  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '--db', 'duttonportal', '-c', 'volunteers', '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',  '--fields', 'name,email,phone']).stdout.pipe(res);
 console.log('after spawn');
 
-  res.set('Content-Type', 'text/plain');
-  mongoExportVolunteersJob.stdout.on('data', function(data) {
-    console.log("before IF statement");
-    if (data) {
-      console.log("Should have received data");
-      res.send(data.toString());
-      console.log("sent data");
-    } else {
-      res.send('mongoexport returned no data');
-    }
-
-  });
-
 });
-
-
-
-
-
 
 
 
