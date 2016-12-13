@@ -157,6 +157,9 @@ app.get('/api/business/:ownerEmail', function(req, res) {
 
 /*code for spawing process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
 The code for piping into stdout at the end of the spawn command came from user robertklep
+
+
+found out about res.download() here from user Jossef Harush:  http://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
 */
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
