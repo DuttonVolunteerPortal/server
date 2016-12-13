@@ -9,7 +9,7 @@ var db;
 var spawn = require('child_process').spawn;
 var password = "bjarne";
 var APP_PATH = path.join(__dirname, 'dist');
-var EXPORT_PATH = path.join(__dirname);
+
 
 
 /*
