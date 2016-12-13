@@ -155,7 +155,9 @@ app.get('/api/business/:ownerEmail', function(req, res) {
 
 /*get the list of contact information as a CSV file for all the people who signed up for a certain job*/
 
-/*code for spawing process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben"*/
+/*code for spawing process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
+The code for piping into stdout at the end of the spawn command came from user robertklep
+*/
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
 var jobNameArray = []
