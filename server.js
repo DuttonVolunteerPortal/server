@@ -163,7 +163,7 @@ console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
 var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
   var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '--db', 'duttonportal', '-c', 'volunteers',
-  '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',  '--fields', 'name,email,phone', '--out', 'specificJobOutput.csv']);
+  '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',  '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
 console.log('after spawn');
 res.download('specificJobOutput.csv');
 });
