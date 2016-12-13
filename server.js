@@ -6,6 +6,7 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
+var spawn = require('child_process').spawn;
 var password = "bjarne";
 var APP_PATH = path.join(__dirname, 'dist');
 
@@ -70,6 +71,7 @@ app.put('/api/business', function(req, res) {
   });
 })
 
+/*SHOULD THS BE REMOVED IF IT IS NOW PART OF THE USER VIEW?*/
 /*add or update a volunteer
 If the volunteer (based on the id field, the prefix of their email address) does not exist, they are created.
 If the volunteer already exists, all fields are changed to match the values give.
@@ -82,16 +84,16 @@ app.put('/api/volunteer', function(req, res) {
   var emailTokens = req.body.email.split("@");
   console.log(emailTokens);//for debugging purposes
 
-//remove the volunteer from the jobs they unchecked.
+  //remove the volunteer from the jobs they unchecked.
   db.collection("job").updateMany({ title: { $nin: jobsIWant } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
     if (err) throw err;
   });
 
-//add the volunteer to the jobs they checked
+  //add the volunteer to the jobs they checked
   db.collection("job").updateMany({ title: { $in: jobsIWant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
     if (err) throw err;
   });
-//update the volunteer's info.
+  //update the volunteer's info.
   db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIWant: jobsIWant}, {upsert: true}, function(err, result){
     console.log(req.body.email);//logging output for debugging purposes
     console.log(req.body.volunteerName);
@@ -101,6 +103,8 @@ app.put('/api/volunteer', function(req, res) {
     res.json(200);
   });
 })
+
+
 
 
 
@@ -119,7 +123,7 @@ app.get('/api/volunteer/:email', function(req, res) {
 })
 
 
-
+/*get the jobs the volunteer wants*/
 app.get('/api/volunteer/:email/jobsIwant', function(req, res) {
   //split prefix off of email address
   var emailTokens = req.params.email.split("@");
@@ -146,6 +150,28 @@ app.get('/api/business/:ownerEmail', function(req, res) {
     res.json(businesses);
   });
 })
+
+
+
+/*code for spawing process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben"*/
+app.get('/api/export/specificJob/:jobName', function(req, res) {
+console.log("going to spawn process now");
+  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '-d', 'duttonportal', '-c', 'volunteers', '-u', 'cs336', '-p', 'bjarne', '--type=csv', '-f', 'email']);
+console.log('after spawn');
+
+  res.set('Content-Type', 'text/plain');
+  mongoExportVolunteersJob.stdout.on('data', function(data) {
+    console.log("before IF statement");
+    if (data) {
+      console.log("Should have received data");
+      res.send(data.toString());
+    } else {
+      res.send('mongoexport returned no data');
+    }
+
+  });
+
+});
 
 
 
