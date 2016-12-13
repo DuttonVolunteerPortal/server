@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
 import $ from 'jquery';
+
 import {API_URL, POLL_INTERVAL} from './global';
 
 module.exports = React.createClass({
+
     getInitialState: function() {
         return {title: '', description: ''};
     },
@@ -51,7 +53,7 @@ module.exports = React.createClass({
     handleDelete: function() {
         $.ajax({
             url: API_URL + "/" + this.props.params.id,
-            type: 'DELETE',
+            type: 'DELETE'
         })
          .done(function(jobs){
              this.context.router.push('/');

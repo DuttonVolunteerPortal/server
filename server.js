@@ -36,6 +36,7 @@ app.get('/api/jobs', function(req, res) {
 
 app.post('/api/jobs', function(req, res) {
         var newJob = {
+            id: Date.now(),
             title: req.body.volunteer_job,
             description: req.body.volunteer_description,
             workers: []
@@ -49,10 +50,17 @@ app.post('/api/jobs', function(req, res) {
     });
 });
 
+app.get('/api/jobs/:id', function(req, res) {
+    db.collection("job").find({"id": Number(req.params.id)}).toArray(function(err, docs) {
+        if (err) throw err;
+        res.json(docs);
+    });
+});
+
 app.put('/api/jobs/:id', function(req, res) {
     var updateId = Number(req.params.id);
     var update = req.body;
-    db.collection('jobs').updateOne(
+    db.collection('job').updateOne(
         { id: updateId },
         { $set: update },
         function(err, result) {
@@ -65,11 +73,11 @@ app.put('/api/jobs/:id', function(req, res) {
 });
 
 app.delete('/api/jobs/:id', function(req, res) {
-    db.collection("jobs").deleteOne(
+    db.collection("job").deleteOne(
         {'id': Number(req.params.id)},
         function(err, result) {
             if (err) throw err;
-            db.collection("jobs").find({}).toArray(function(err, docs) {
+            db.collection("job").find({}).toArray(function(err, docs) {
                 if (err) throw err;
                 res.json(docs);
             });

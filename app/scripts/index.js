@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+
 import { Router, Route, Redirect, browserHistory } from 'react-router';
 
-import AdminBox from './adminBox.js'
-import AdminEdit from './adminJobEdit.js'
+import AdminBox from './adminBox'
+import AdminEdit from './adminJobEdit'
 
 import '../css/base.css';
 
