@@ -12,16 +12,6 @@ module.exports = React.createClass({
 	handleEmailChange: function(e) {
 		this.setState({email: e.target.value});
 	},
-	handleSubmit: function(e) {
-		e.preventDefault();
-		var name = this.state.name.trim();
-		var email = this.state.email.trim();
-		if (!name || !email) {
-			return;
-		}
-		this.props.onUserSubmit({name: name, email: email});
-		this.setState({name: '', email: ''}); //Or should we leave it there and not reset?
-	},
 	render: function() {
 		return (
 			<form className="contactInfo" onSubmit={this.handleSubmit}>
@@ -31,7 +21,6 @@ module.exports = React.createClass({
 				<input className="ui-widget ui-corner-all" type="text" placeholder="Email"
 					value={this.state.email} onChange={this.handleEmailChange}
 				/>
-				<input className="ui-button ui-widget ui-corner-all" type="submit" value="Post" />
 			</form>
 		);
 	}

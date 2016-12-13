@@ -26,7 +26,6 @@ module.exports = React.createClass({
 					<input className="ui-widget ui-corner-all" type="text"
 						value={this.state.name} onChange={this.handleBodyChange}
 					/>
-					<input className="ui-button ui-widget ui-corner-all" type="submit" value="Post" />
 				</form>
 			</div>
 		);

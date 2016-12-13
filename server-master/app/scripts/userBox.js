@@ -9,6 +9,15 @@ module.exports = React.createClass({
   getInitialState: function(){
     return {data: []};
   },
+  handleContactInfo: function(user) {
+	  
+  },
+  handleJobsChecked: function(user) {
+	  
+  },
+  handleBusinessInfo: function(user) {
+	  
+  },
   handleUserSubmit: function(user) {
 	  
   },
@@ -37,10 +46,11 @@ module.exports = React.createClass({
     return (
       <div className="userBox" >
         <h1>Volunteer Submission Form</h1>
-        <ContactInfo onUserSubmit={this.handleUserSubmit} />
+        <ContactInfo onUserSubmit={this.handleContactInfo} />
 		<div><strong>Check all that you are able to assist with:</strong></div>
 		<CategoryList data={this.state.data} />
 		<BusinessInfo onBusinessSubmit={this.handleBusinessSubmit} />
+		<input className="ui-button ui-widget ui-corner-all" type="submit" value="Submit" /> //This won't work; it's not in a form.
       </div>
     );
   }
