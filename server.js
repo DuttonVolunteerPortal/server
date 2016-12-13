@@ -80,25 +80,25 @@ This means that even if you update one field, you must send back the original va
 */
 
 app.put('/api/volunteer', function(req, res) {
-  var jobsIWant = req.body.jobsIWant;
+  var jobsDesired = req.body.jobsDesired;
   //split prefix off of email address
   var emailTokens = req.body.email.split("@");
   console.log(emailTokens);//for debugging purposes
 
   //remove the volunteer from the jobs they unchecked.
-  db.collection("job").updateMany({ title: { $nin: jobsIWant } }, {$pullAll: { workers: [req.body.volunteerName] } }, function(err, result){
+  db.collection("job").updateMany({ title: { $nin: jobsDesired } }, {$pullAll: { workers: [req.body.name] } }, function(err, result){
     if (err) throw err;
   });
 
   //add the volunteer to the jobs they checked
-  db.collection("job").updateMany({ title: { $in: jobsIWant } }, {$push: { workers: req.body.volunteerName } }, function(err, result){
+  db.collection("job").updateMany({ title: { $in: jobsDesired } }, {$push: { workers: req.body.name } }, function(err, result){
     if (err) throw err;
   });
   //update the volunteer's info.
-  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.volunteerName, phone: req.body.phone, jobsIWant: jobsIWant}, {upsert: true}, function(err, result){
+  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.name, jobsDesired: jobsDesired}, {upsert: true}, function(err, result){
     console.log(req.body.email);//logging output for debugging purposes
-    console.log(req.body.volunteerName);
-    console.log(req.body.jobsIWant);
+    console.log(req.body.name);
+    console.log(req.body.jobsDesired);
 
     if (err) throw err;
     res.json(200);
@@ -125,7 +125,7 @@ app.get('/api/volunteer/:email', function(req, res) {
 
 
 /*get the jobs the volunteer wants*/
-app.get('/api/volunteer/:email/jobsIwant', function(req, res) {
+app.get('/api/volunteer/:email/jobsDesired', function(req, res) {
   //split prefix off of email address
   var emailTokens = req.params.email.split("@");
   console.log(emailTokens);//for debugging
@@ -160,15 +160,12 @@ The code for piping into stdout at the end of the spawn command came from user r
 */
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
-var jobNameArray = []
-jobNameArray.push(req.params.jobName);
-console.log(jobNameArray);
-var queryString = '{ jobsIWant: { $in: ["'+ req.params.jobName +'"] } }';
-console.log(req.params.jobName);
-console.log(queryString);
-  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '--db', 'duttonportal', '-c', 'volunteers', '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',  '--fields', 'name,email,phone']).stdout.pipe(res);
+// jobNameArray.push(req.params.jobName);
+var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
+  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '--db', 'duttonportal', '-c', 'volunteers',
+  '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',  '--fields', 'name,email,phone', '--out', 'specificJobOutput.csv']);
 console.log('after spawn');
-
+res.download('specificJobOutput.csv');
 });
 
 
