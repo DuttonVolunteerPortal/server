@@ -6,7 +6,7 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
-var spawn = require('child_process').spawn;
+var spawnSync = require('child_process').spawnSync;
 var password = "bjarne";
 var APP_PATH = path.join(__dirname, 'dist');
 
@@ -103,9 +103,6 @@ app.put('/api/volunteer', function(req, res) {
 
 
 
-
-
-
 /*get a volunteer by providing their email address
 returns an array with (hopefully) one element.
 */
@@ -158,8 +155,10 @@ app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
 var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
-  var mongoExportVolunteersJob = spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788', '--db', 'duttonportal', '-c', 'volunteers',
-  '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',  '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
+  var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
+   '--db', 'duttonportal', '-c', 'volunteers',
+  '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',
+  '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
 console.log('after spawn');
 res.download('specificJobOutput.csv');
 });

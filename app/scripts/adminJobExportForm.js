@@ -1,5 +1,6 @@
 import React from 'react';
 import $ from 'jquery';
+import {API_EXPORT} from './global';
 
 
 module.exports = React.createClass({
@@ -15,15 +16,15 @@ module.exports = React.createClass({
     if (!jobToExport) {
       return;
     }
-    // TODO: send request to the server
-    this.props.onJobSubmit({jobToExport: jobToExport});
+  window.location =  '/api/export/specificJob' + "/" + jobToExport;
+  console.log(window.location);
     this.setState({jobToExport: ''});
   },
   render: function() {
     return (
       <div>
       <h1>Get Volunteers by Job</h1>
-      <form className="exportForm" onSubmit={this.handleSubmit}>
+      <form className="JobExportForm" onSubmit={this.handleSubmit}>
         <input
           type="text"
           placeholder="Job Name"
