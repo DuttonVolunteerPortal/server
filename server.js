@@ -43,6 +43,7 @@ app.get('/api/jobs', function(req, res) {
 });
 
 
+
 //get a list of all the businesses
 app.get('/api/business', function(req, res) {
   db.collection("business").find({}).toArray(function(err, docs) {

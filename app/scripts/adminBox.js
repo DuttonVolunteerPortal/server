@@ -59,7 +59,7 @@ module.exports = React.createClass({
         <h1>Volunteering Jobs</h1>
         <JobList data={this.state.data} />
         <JobForm onJobSubmit={this.handleJobSubmit} />
-        <JobExportForm/>
+        <JobExportForm data={this.state.data} />
       </div>
     );
   }
