@@ -55,7 +55,6 @@ module.exports = React.createClass({
         setInterval(this.loadJobsFromServer, POLL_INTERVAL);
     },
 
-
     removeVolunteer: function(e) {
       //send in two pieces of data
       /*
@@ -64,12 +63,10 @@ module.exports = React.createClass({
           name: ''
         }
       */
-      var newURL = API_URL + '/volunteer'
+      var newURL = API_URL + '/' + e.jobToRemove + '/' + e.name;
       $.ajax({
         url: newURL,
-        dataType: 'json',
         type: 'DELETE',
-        data: e,
       })
         .done(function(data){
         }.bind(this))

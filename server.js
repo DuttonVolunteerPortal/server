@@ -69,7 +69,7 @@ app.put('/api/jobs/:id', function(req, res) {
          { $set: update },
          function(err, result) {
              if (err) throw err;
-             db.collection("jobs").find({}).toArray(function(err, docs) {
+             db.collection("job").find({}).toArray(function(err, docs) {
                  if (err) throw err;
                  res.json(docs);
              });
@@ -89,11 +89,11 @@ app.delete('/api/jobs/:id', function(req, res) {
 });
 
 //this removes a volunteer from a job
-app.delete('/api/jobs/volunteer', function(req, res) {
-  db.collection("job").find({"title" : req.body.jobToRemove}).toArray(function(err, jobs) {
+app.delete('/api/jobs/:jobToRemove/:name', function(req, res) {
+  db.collection("job").find({"title" : req.params.jobToRemove}).toArray(function(err, jobs) {
     //only one job to find
     for (job of jobs) {
-      var index = job.workers.indexOf(req.body.name)
+      var index = job.workers.indexOf(req.params.name)
       if (index > -1) {
         job.workers.splice(index, 1);
       }
@@ -101,7 +101,7 @@ app.delete('/api/jobs/volunteer', function(req, res) {
     }
   })
   res.json(200)
-})
+});
 
 //get a list of all the businesses
 app.get('/api/business', function(req, res) {
