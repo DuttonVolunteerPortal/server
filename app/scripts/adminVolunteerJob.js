@@ -37,6 +37,7 @@ module.exports = React.createClass({
           {this.props.title}
         </h2>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
+        <Link to={'/' + this.props.id}>Edit</Link>
         <div className={styles.accordionContainer}>
           <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
             <VolunteerList data={this.props.workers} removeVolunteer={this.removeVolunteer}/>

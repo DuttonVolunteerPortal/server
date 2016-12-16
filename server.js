@@ -54,11 +54,53 @@ app.post('/api/jobs', function(req, res) {
      });
 });
 
+app.get('/api/jobs/:id', function(req, res) {
+     db.collection("job").find({"id": Number(req.params.id)}).toArray(function(err, docs) {
+         if (err) throw err;
+         res.json(docs);
+    });
+});
+
+app.put('/api/jobs/:id', function(req, res) {
+     var updateId = Number(req.params.id);
+     var update = req.body;
+     db.collection('job').updateOne(
+         { id: updateId },
+         { $set: update },
+         function(err, result) {
+             if (err) throw err;
+             db.collection("jobs").find({}).toArray(function(err, docs) {
+                 if (err) throw err;
+                 res.json(docs);
+             });
+         });
+});
+
+app.delete('/api/jobs/:id', function(req, res) {
+     db.collection("job").deleteOne(
+         {'id': Number(req.params.id)},
+         function(err, result) {
+             if (err) throw err;
+             db.collection("job").find({}).toArray(function(err, docs) {
+                 if (err) throw err;
+                 res.json(docs);
+             });
+         });
+});
+
 //this removes a volunteer from a job
-app.delete('api/jobs/volunteer', function(req, res) {
-  console.log(req.body)
-  db.collection("job").update({"title" : req.jobToRemove}, { $pull : { 'workers' : req.body.name}})
-  res.json(200);
+app.delete('/api/jobs/volunteer', function(req, res) {
+  db.collection("job").find({"title" : req.body.jobToRemove}).toArray(function(err, jobs) {
+    //only one job to find
+    for (job of jobs) {
+      var index = job.workers.indexOf(req.body.name)
+      if (index > -1) {
+        job.workers.splice(index, 1);
+      }
+      db.collection("job").updateOne({"title" : job.title}, job)
+    }
+  })
+  res.json(200)
 })
 
 //get a list of all the businesses
