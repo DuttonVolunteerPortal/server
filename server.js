@@ -42,6 +42,12 @@ app.get('/api/jobs', function(req, res) {
   });
 });
 
+//this removes a volunteer from a job
+app.delete('api/jobs/volunteer', function(req, res) {
+  console.log(req.body)
+  db.collection("job").update({"title" : req.jobToRemove}, { $pull : { 'workers' : req.body.name}})
+  res.json(200);
+})
 
 //get a list of all the businesses
 app.get('/api/business', function(req, res) {

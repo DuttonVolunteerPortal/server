@@ -6,12 +6,10 @@ import Volunteer from './adminVolunteer.js'
 
 module.exports = React.createClass({
   render: function() {
+    var removeVolunteer = this.props.removeVolunteer
     var volunteerNodes = this.props.data.map(function(volunteer) {
-      let removeVolunteer = function(e) {
-        console.log(volunteer)
-      }
       return (
-        <Volunteer name={volunteer}/>
+        <Volunteer name={volunteer} removeVolunteer={removeVolunteer}/>
       );
     });
     return (

@@ -11,6 +11,10 @@ module.exports = React.createClass({
     var rawMarkup = md.render(this.props.children.toString());
     return { __html: rawMarkup };
   },
+  removeVolunteer: function(e) {
+    e.jobToRemove = this.props.title
+    this.props.removeVolunteer(e)
+  },
   render: function() {
     return (
       <div className="job">
@@ -19,7 +23,7 @@ module.exports = React.createClass({
         </h2>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
         <Link to={'/' + this.props.id}>Edit</Link>
-        <VolunteerList data={this.props.workers} />
+        <VolunteerList data={this.props.workers} removeVolunteer={this.removeVolunteer} />
       </div>
     );
   }

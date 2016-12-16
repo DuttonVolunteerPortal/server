@@ -4,7 +4,13 @@ import { Link } from 'react-router';
 
 module.exports = React.createClass({
   removeVolunteer: function() {
-    console.log(this.props.name)
+    var data = {
+      jobToRemove: '',
+      name: ''
+    };
+    console.log(this.props)
+    data.name = this.props.name;
+    this.props.removeVolunteer(data)
   },
   render: function() {
     return (
