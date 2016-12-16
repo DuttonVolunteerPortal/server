@@ -40,11 +40,11 @@ module.exports = React.createClass({
         <div className={styles.accordionContainer}>
           <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
             <VolunteerList data={this.props.workers} removeVolunteer={this.removeVolunteer}/>
-            <form className={styles.JobExportForm} onSubmit={this.handleSubmit}>
-              <input type="submit" value="Export" />
-            </form>
           </Collapsible>
         </div>
+        <form className={styles.JobExportForm} onSubmit={this.handleSubmit}>
+          <input type="submit" value="Export" />
+        </form>
       </div>
     );
   }
