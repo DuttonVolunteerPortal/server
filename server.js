@@ -152,7 +152,7 @@ app.get('/api/business/:ownerEmail', function(req, res) {
 The code for piping into stdout at the end of the spawn command came from user robertklep
 found out about res.download() here from user Jossef Harush:  http://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
 */
-app.get('/api/export/specificvolunteers/', function(req, res) {
+app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
 var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
