@@ -81,7 +81,6 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div className={styles.adminBox}>
-        <h1>Volunteering Jobs</h1>
         <JobList data={this.state.data} removeVolunteer={this.removeVolunteer} />
         <JobForm onJobSubmit={this.handleJobSubmit} />
         <BusinessList />

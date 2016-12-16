@@ -5,8 +5,8 @@ import { Link } from 'react-router';
 module.exports = React.createClass({
   removeVolunteer: function() {
     var data = {
-      jobToRemove: '',
-      name: ''
+      jobToRemove: "",
+      name: ""
     };
     console.log(this.props)
     data.name = this.props.name;
