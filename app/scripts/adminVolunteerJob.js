@@ -1,18 +1,21 @@
-
 import React from 'react';
 import Remarkable from 'remarkable';
 import { Link } from 'react-router';
 
+import styles from '../css/base.css';
+import Collapsible from 'react-collapsible';
+
 import VolunteerList from './adminVolunteers.js'
 
 module.exports = React.createClass({
-  rawMarkup: function() {
+
+   rawMarkup: function() {
     var md = new Remarkable({html: true});
     var rawMarkup = md.render(this.props.children.toString());
     return { __html: rawMarkup };
   },
-  handleSubmit: function(e) {
 
+  handleSubmit: function(e) {
     e.preventDefault();
     var jobToExport = this.props.title.trim();
     console.log("Handling submit");
@@ -23,18 +26,21 @@ module.exports = React.createClass({
     console.log(jobToExport);
     this.setState({jobToExport: ''});
   },
+
   render: function() {
     return (
       <div className="job">
-      <h2 className="jobTitle">
-      {this.props.title}
-      </h2>
-      <span dangerouslySetInnerHTML={this.rawMarkup()} />
-      <Link to={'/' + this.props.id}>Edit</Link>
-      <VolunteerList data={this.props.workers} />
-      <form className="JobExportForm" onSubmit={this.handleSubmit}>
-      <input type="submit" value="Export" />
-      </form>
+        <h2 className="jobTitle">
+          {this.props.title}
+        </h2>
+        <span dangerouslySetInnerHTML={this.rawMarkup()} />
+        <Link to={'/' + this.props.id}>Edit</Link>
+        <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
+          <VolunteerList data={this.props.workers} />
+          <form className="JobExportForm" onSubmit={this.handleSubmit}>
+            <input type="submit" value="Export" />
+          </form>
+        </Collapsible>
       </div>
     );
   }

@@ -3,8 +3,11 @@ import $ from 'jquery';
 
 import JobList from './adminVolunteerJobList.js';
 import JobForm from './adminForm.js';
+import BusinessList from './businessList.js';
 
-import {API_URL, POLL_INTERVAL} from './global';
+import styles from '../css/base.css';
+
+import {API_URL, API_URL2, POLL_INTERVAL} from './global';
 
 module.exports = React.createClass({
 
@@ -54,10 +57,10 @@ module.exports = React.createClass({
 
   render: function() {
     return (
-      <div className="adminBox">
-        <h1>Volunteering Jobs</h1>
+      <div className={styles.adminBox}>
         <JobList data={this.state.data} />
         <JobForm onJobSubmit={this.handleJobSubmit} />
+        <BusinessList />
       </div>
     );
   }
