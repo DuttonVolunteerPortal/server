@@ -88,6 +88,20 @@ app.delete('/api/jobs/:id', function(req, res) {
          });
 });
 
+//this removes a volunteer from a job
+app.delete('/api/jobs/volunteer', function(req, res) {
+  db.collection("job").find({"title" : req.body.jobToRemove}).toArray(function(err, jobs) {
+    //only one job to find
+    for (job of jobs) {
+      var index = job.workers.indexOf(req.body.name)
+      if (index > -1) {
+        job.workers.splice(index, 1);
+      }
+      db.collection("job").updateOne({"title" : job.title}, job)
+    }
+  })
+  res.json(200)
+})
 
 //get a list of all the businesses
 app.get('/api/business', function(req, res) {
@@ -110,77 +124,6 @@ app.put('/api/business', function(req, res) {
 
     if (err) throw err;
     res.json(200);
-  });
-})
-
-/*SHOULD THS BE REMOVED IF IT IS NOW PART OF THE USER VIEW?*/
-/*add or update a volunteer
-If the volunteer (based on the id field, the prefix of their email address) does not exist, they are created.
-If the volunteer already exists, all fields are changed to match the values give.
-This means that even if you update one field, you must send back the original values of all the other fields.
-*/
-app.put('/api/volunteer', function(req, res) {
-  var jobsDesired = req.body.jobsDesired;
-  //split prefix off of email address
-  var emailTokens = req.body.email.split("@");
-  console.log(emailTokens);//for debugging purposes
-
-  //remove the volunteer from the jobs they unchecked.
-  db.collection("job").updateMany({ title: { $nin: jobsDesired } }, {$pullAll: { workers: [req.body.name] } }, function(err, result){
-    if (err) throw err;
-  });
-
-  //add the volunteer to the jobs they checked
-  db.collection("job").updateMany({ title: { $in: jobsDesired } }, {$push: { workers: req.body.name } }, function(err, result){
-    if (err) throw err;
-  });
-  //update the volunteer's info.
-  db.collection("volunteers").updateOne({id: emailTokens[0]}, {id: emailTokens[0], email: req.body.email, name: req.body.name, jobsDesired: jobsDesired}, {upsert: true}, function(err, result){
-    console.log(req.body.email);//logging output for debugging purposes
-    console.log(req.body.name);
-    console.log(req.body.jobsDesired);
-
-    if (err) throw err;
-    res.json(200);
-  });
-})
-
-/*get a volunteer by providing their email address
-returns an array with (hopefully) one element.
-*/
-app.get('/api/volunteer/:email', function(req, res) {
-  //split prefix off of email address
-  var emailTokens = req.params.email.split("@");
-  console.log(emailTokens);//for debugging
-  db.collection("volunteers").find({id: emailTokens[0]}).toArray(function(err, volunteers) {
-    assert.equal(err, null);
-    res.json(volunteers);
-  });
-})
-
-/*get the jobs the volunteer wants*/
-app.get('/api/volunteer/:email/jobsDesired', function(req, res) {
-  //split prefix off of email address
-  var emailTokens = req.params.email.split("@");
-  console.log(emailTokens);//for debugging
-  db.collection("volunteers").find({id: emailTokens[0]}).toArray(function(err, volunteers) {
-    assert.equal(err, null);
-    res.json(volunteers);
-  });
-})
-
-/*get a business by providing its name address
-returns an array with (hopefully) one element.
-I'me using the prefix of the owner's personal email address as a way to identify the business.
-This way we can update the name later if necessary and it gives us a short way to refer to the business.
-*/
-app.get('/api/business/:ownerEmail', function(req, res) {
-  //split prefix off of email address
-  var emailTokens = req.params.ownerEmail.split("@");
-  console.log(emailTokens);//for debugging
-  db.collection("business").find({ownerID: emailTokens[0]}).toArray(function(err, businesses) {
-    assert.equal(err, null);
-    res.json(businesses);
   });
 })
 

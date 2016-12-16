@@ -8,9 +8,10 @@ import styles from '../css/base.css';
 
 module.exports = React.createClass({
   render: function() {
+    var removeVolunteer = this.props.removeVolunteer
     var volunteerJobNodes = this.props.data.map(function(volunteerJob) {
       return (
-        <Job id={volunteerJob.id} title={volunteerJob.title} key={volunteerJob.id} workers={volunteerJob.workers}>
+        <Job id={volunteerJob.id} title={volunteerJob.title} key={volunteerJob.id} workers={volunteerJob.workers} removeVolunteer={removeVolunteer}>
           {volunteerJob.description}
         </Job>
       );

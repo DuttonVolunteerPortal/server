@@ -55,10 +55,33 @@ module.exports = React.createClass({
         setInterval(this.loadJobsFromServer, POLL_INTERVAL);
     },
 
+
+    removeVolunteer: function(e) {
+      //send in two pieces of data
+      /*
+        e = {
+          jobToRemove: ''
+          name: ''
+        }
+      */
+      var newURL = API_URL + '/volunteer'
+      $.ajax({
+        url: newURL,
+        dataType: 'json',
+        type: 'DELETE',
+        data: e,
+      })
+        .done(function(data){
+        }.bind(this))
+        .fail(function(xhr, status, err) {
+          console.error(this.props.url, status, err.toString());
+        }.bind(this));
+    },
+
   render: function() {
     return (
       <div className={styles.adminBox}>
-        <JobList data={this.state.data} />
+        <JobList data={this.state.data} removeVolunteer={this.removeVolunteer} />
         <JobForm onJobSubmit={this.handleJobSubmit} />
         <BusinessList />
       </div>

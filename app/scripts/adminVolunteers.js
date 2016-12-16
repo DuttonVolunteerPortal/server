@@ -9,9 +9,10 @@ import styles from '../css/base.css';
 module.exports = React.createClass({
 
   render: function() {
+    var removeVolunteer = this.props.removeVolunteer
     var volunteerNodes = this.props.data.map(function(volunteer) {
       return (
-        <Volunteer name={volunteer}/>
+        <Volunteer name={volunteer} removeVolunteer={removeVolunteer}/>
       );
     });
     return (
