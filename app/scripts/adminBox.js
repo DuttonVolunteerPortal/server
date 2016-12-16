@@ -3,7 +3,6 @@ import $ from 'jquery';
 
 import JobList from './adminVolunteerJobList.js';
 import JobForm from './adminForm.js';
-import JobExportForm from './adminJobExportForm.js'
 
 import {API_URL, POLL_INTERVAL} from './global';
 
@@ -59,7 +58,6 @@ module.exports = React.createClass({
         <h1>Volunteering Jobs</h1>
         <JobList data={this.state.data} />
         <JobForm onJobSubmit={this.handleJobSubmit} />
-        <JobExportForm data={this.state.data} />
       </div>
     );
   }
