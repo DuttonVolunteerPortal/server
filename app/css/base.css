@@ -8,15 +8,16 @@ body {
 }
 
 input[type="text"] {
-    width: 150px;
+    width: 400px;
     height: 30px;
     margin-bottom: 10px;
+    display: block;
 }
 
 input[type="submit"] {
     width: auto;
     max-width: 1280px;
-    display: inline; 
+    display: block; 
 }
 
 a {
@@ -64,7 +65,7 @@ h4 {
 }
 
 p, ul {
-    margin: 15px 0;
+    margin: 5px 0;
 }
 
 ul {
@@ -103,7 +104,7 @@ ul {
     order: 1;
 }
 
-.jobListHeader {
+.ListHeader {
     font-size: 230%;
 }
 
@@ -111,7 +112,7 @@ header {
     display: block;
     margin: 0px;
     padding: 5px;
-    border: 1px solid #000;
+    border: 2px solid #000;
     background: #add8e6;
     font-size: 250%;
     font-weight: bold;
@@ -122,7 +123,7 @@ footer {
     display: block;
     margin: 0px;
     padding: 5px;
-    border: 1px solid #000;
+    border: 2px solid #000;
     background: #add8e6;
     font-size: 90%;
     font-weight: italic;
@@ -131,5 +132,23 @@ footer {
 
 .accordion {
     cursor: pointer;
+    text-align: center;
+}
+
+.accordionContainer {
+    border: 2px solid #fff;
+}
+
+.divContainer {
+    border: 2px solid #fff;
+    border-bottom-width: 0px;
+    border-left-width: 0px;
+    border-right-width: 0px;
+    padding-left: 5px;
+    text-align: left;
+}
+
+.JobExportForm {
+    padding-left: 5px;
     text-align: left;
 }
