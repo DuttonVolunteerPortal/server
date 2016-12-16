@@ -3,29 +3,20 @@ import Remarkable from 'remarkable';
 import { Link } from 'react-router';
 
 import styles from '../css/base.css';
-import Collapsible from 'react-collapsible';
-
-import VolunteerList from './adminVolunteers.js'
 
 module.exports = React.createClass({
-
    rawMarkup: function() {
     var md = new Remarkable({html: true});
     var rawMarkup = md.render(this.props.children.toString());
     return { __html: rawMarkup };
   },
-
   render: function() {
     return (
-      <div className="job">
-        <h2 className="jobTitle">
-          {this.props.title}
+      <div className="business">
+        <h2 className="businessTitle">
+          {this.props.owner_name}, {this.props.email}
         </h2>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
-        <Link to={'/' + this.props.id}>Edit</Link>
-        <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
-          <VolunteerList data={this.props.workers} />
-        </Collapsible>
       </div>
     );
   }

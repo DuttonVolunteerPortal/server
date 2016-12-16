@@ -4,6 +4,8 @@ import Remarkable from 'remarkable';
 
 import Job from './adminVolunteerJob.js';
 
+import styles from '../css/base.css';
+
 module.exports = React.createClass({
   render: function() {
     var volunteerJobNodes = this.props.data.map(function(volunteerJob) {
@@ -14,7 +16,8 @@ module.exports = React.createClass({
       );
     });
     return (
-      <div className="jobList">
+      <div className={styles.adminJobList}>
+        <h2 className={styles.jobListHeader}>Volunteering Jobs</h2>
         {volunteerJobNodes}
       </div>
     );
