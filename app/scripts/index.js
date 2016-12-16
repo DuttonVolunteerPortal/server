@@ -6,7 +6,7 @@ import { Router, Route, Redirect, browserHistory } from 'react-router';
 import AdminBox from './adminBox'
 import AdminEdit from './adminJobEdit'
 
-import '../css/base.css';
+import styles from '../css/base.css';
 
 ReactDOM.render((
 	<Router history={browserHistory}>

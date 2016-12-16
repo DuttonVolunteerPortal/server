@@ -1,6 +1,7 @@
 import React from 'react';
 import $ from 'jquery';
 
+import styles from '../css/base.css';
 
 module.exports = React.createClass({
   getInitialState: function() {
@@ -25,7 +26,7 @@ module.exports = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div className={styles.adminJobForm}>
       <h1>Create a New Job</h1>
       <form className="jobForm" onSubmit={this.handleSubmit}>
         <input

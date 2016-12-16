@@ -1,5 +1,5 @@
 body {
-    background: #fff;
+    background: #d3d3d3;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.7;
@@ -71,3 +71,65 @@ ul {
     padding-left: 30px;
 }
 
+.adminBox {
+    display: flex;
+    flex-flow: row;
+}
+
+.adminJobList {
+    background: #add8e6;
+    padding: 15px;
+    margin: 0px;
+    border: 2px solid #000;
+    flex: 1 1 40%;
+    order: 2;
+}
+
+.adminJobForm {
+    background: #fdf7ef;
+    padding: 15px;
+    margin: 0px;
+    border: 2px solid #000;
+    flex: 1 1 30%;
+    order: 3;
+}
+
+.businessList {
+    background: #fdf7ef;
+    padding: 15px;
+    margin: 0px;
+    border: 2px solid #000;
+    flex: 1 1 30%;
+    order: 1;
+}
+
+.jobListHeader {
+    font-size: 230%;
+}
+
+header {
+    display: block;
+    margin: 0px;
+    padding: 5px;
+    border: 1px solid #000;
+    background: #add8e6;
+    font-size: 250%;
+    font-weight: bold;
+    text-align: center;
+}
+
+footer {
+    display: block;
+    margin: 0px;
+    padding: 5px;
+    border: 1px solid #000;
+    background: #add8e6;
+    font-size: 90%;
+    font-weight: italic;
+    text-align: left;
+}
+
+.accordion {
+    cursor: pointer;
+    text-align: left;
+}
