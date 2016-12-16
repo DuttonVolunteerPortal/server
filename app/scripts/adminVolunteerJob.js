@@ -26,7 +26,10 @@ module.exports = React.createClass({
     console.log(jobToExport);
     this.setState({jobToExport: ''});
   },
-
+  removeVolunteer: function(e) {
+    e.jobToRemove = this.props.title
+    this.props.removeVolunteer(e)
+  },
   render: function() {
     return (
       <div className="job">
@@ -34,10 +37,9 @@ module.exports = React.createClass({
           {this.props.title}
         </h2>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
-        <Link to={'/' + this.props.id}>Edit</Link>
         <div className={styles.accordionContainer}>
           <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
-            <VolunteerList data={this.props.workers} />
+            <VolunteerList data={this.props.workers} removeVolunteer={this.removeVolunteer}/>
             <form className={styles.JobExportForm} onSubmit={this.handleSubmit}>
               <input type="submit" value="Export" />
             </form>
