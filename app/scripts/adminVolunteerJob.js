@@ -35,12 +35,14 @@ module.exports = React.createClass({
         </h2>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
         <Link to={'/' + this.props.id}>Edit</Link>
-        <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
-          <VolunteerList data={this.props.workers} />
-          <form className="JobExportForm" onSubmit={this.handleSubmit}>
-            <input type="submit" value="Export" />
-          </form>
-        </Collapsible>
+        <div className={styles.accordionContainer}>
+          <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
+            <VolunteerList data={this.props.workers} />
+            <form className={styles.JobExportForm} onSubmit={this.handleSubmit}>
+              <input type="submit" value="Export" />
+            </form>
+          </Collapsible>
+        </div>
       </div>
     );
   }

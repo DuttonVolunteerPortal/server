@@ -45,6 +45,7 @@ module.exports = React.createClass({
     });
     return (
       <div className={styles.businessList}>
+        <h2 className={styles.ListHeader}>Business List</h2>
         {businessNodes}
       </div>
     );

@@ -27,7 +27,7 @@ module.exports = React.createClass({
   render: function() {
     return (
       <div className={styles.adminJobForm}>
-      <h1>Create a New Job</h1>
+      <h2 className={styles.ListHeader}>Create a New Job</h2>
       <form className="jobForm" onSubmit={this.handleSubmit}>
         <input
           type="text"

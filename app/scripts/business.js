@@ -14,7 +14,7 @@ module.exports = React.createClass({
     return (
       <div className="business">
         <h2 className="businessTitle">
-          {this.props.owner_name}, {this.props.email}
+          {this.props.owner_name}
         </h2>
         <span dangerouslySetInnerHTML={this.rawMarkup()} />
       </div>

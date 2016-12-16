@@ -15,7 +15,7 @@ module.exports = React.createClass({
       );
     });
     return (
-      <div className="volunteeringList">
+      <div className={styles.divContainer}>
       	<h3>Volunteers</h3>
         {volunteerNodes}
       </div>

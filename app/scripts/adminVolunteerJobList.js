@@ -17,7 +17,7 @@ module.exports = React.createClass({
     });
     return (
       <div className={styles.adminJobList}>
-        <h2 className={styles.jobListHeader}>Volunteering Jobs</h2>
+        <h2 className={styles.ListHeader}>Volunteering Jobs</h2>
         {volunteerJobNodes}
       </div>
     );
