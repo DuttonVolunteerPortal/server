@@ -3,11 +3,16 @@ import Remarkable from 'remarkable';
 import { Link } from 'react-router';
 
 module.exports = React.createClass({
+  removeVolunteer: function() {
+    console.log(this.props.name)
+  },
   render: function() {
-    console.log(this.props)
     return (
       <div className="volunteer">
-        <p>{this.props.name}</p>
+        <form className="removeVolunteer" onSubmit={this.removeVolunteer}>
+          <h3>{this.props.name}</h3>
+          <input type="submit" value="remove"/>
+        </form>
       </div>
     );
   }

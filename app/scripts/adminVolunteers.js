@@ -11,12 +11,7 @@ module.exports = React.createClass({
         console.log(volunteer)
       }
       return (
-        <div>
-          <Volunteer name={volunteer}/>
-          <form className="removeVolunteer" onSubmit={removeVolunteer}>
-            <input type="submit" value="remove"/>
-          </form>
-        </div>
+        <Volunteer name={volunteer}/>
       );
     });
     return (
