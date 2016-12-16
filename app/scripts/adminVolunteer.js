@@ -16,7 +16,7 @@ module.exports = React.createClass({
     return (
       <div className="volunteer">
         <form className="removeVolunteer" onSubmit={this.removeVolunteer}>
-          <h3>{this.props.name}</h3>
+          <p>{this.props.name}</p>
           <input type="submit" value="remove"/>
         </form>
       </div>
