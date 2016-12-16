@@ -15,6 +15,18 @@ module.exports = React.createClass({
     return { __html: rawMarkup };
   },
 
+  handleSubmit: function(e) {
+    e.preventDefault();
+    var jobToExport = this.props.title.trim();
+    console.log("Handling submit");
+    if (!jobToExport) {
+      return;
+    }
+    window.location =  '/api/export/specificJob' + "/" + jobToExport;
+    console.log(jobToExport);
+    this.setState({jobToExport: ''});
+  },
+
   render: function() {
     return (
       <div className="job">
@@ -25,6 +37,9 @@ module.exports = React.createClass({
         <Link to={'/' + this.props.id}>Edit</Link>
         <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
           <VolunteerList data={this.props.workers} />
+          <form className="JobExportForm" onSubmit={this.handleSubmit}>
+            <input type="submit" value="Export" />
+          </form>
         </Collapsible>
       </div>
     );
