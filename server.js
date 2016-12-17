@@ -6,7 +6,7 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
-var spawn = require('child_process').spawn;
+var spawnSync = require('child_process').spawnSync;
 var APP_PATH = path.join(__dirname, 'dist');
 
 /*
@@ -139,20 +139,31 @@ app.put('/api/business', function(req, res) {
 The code for piping into stdout at the end of the spawn command came from user robertklep
 found out about res.download() here from user Jossef Harush:  http://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
 
-
 found out about writing to /tmp on heroku from here, users David S and Austin Pocus http://stackoverflow.com/questions/12416738/how-to-use-herokus-ephemeral-filesystem
+COPIED CODE FOR CREATING A FOLDER from here, user Louis:  http://stackoverflow.com/questions/22664654/unable-to-read-a-saved-file-in-heroku
 */
 
 
 app.get('/api/export/specificJob/:jobName', function(req, res) {
+
+var exportDir = path.join(process.cwd(), '/exportTemp/');
+if(!fs.existsSync(exportDir)) {
+  fs.mkdirSync(exportDir);
+}
+
+
+var filename = exportDir + 'specificJobOutput.csv';
+console.log(filename);
+
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
 var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
-var mongoExportVolunteersJob =  spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788',
-   '--db', 'duttonportal', '-c', 'volunteers',
-  '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-  '--fields', 'name,email']).stdout.pipe(res);
+var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
+ '--db', 'duttonportal', '-c', 'volunteers',
+'-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
+'--fields', 'name,email', '--out', filename]);
 console.log('after spawn');
+res.download(filename);
 // res.send(mongoExportVolunteersJob);
 // res.json(200);
 });
