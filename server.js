@@ -142,7 +142,8 @@ var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
   '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',
   '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
 console.log('after spawn');
-res.download('specificJobOutput.csv');
+// res.download('specificJobOutput.csv');
+res.json(200);
 });
 
 app.use('*', express.static(APP_PATH));
