@@ -1,1 +1,1 @@
-Find the lab12 app at: https://sleepy-spire-13451.herokuapp.com/
+Find the app at: https://dutton-volunteer-portal-admin.herokuapp.com/
