@@ -132,7 +132,12 @@ app.put('/api/business', function(req, res) {
 /*code for spawning process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
 The code for piping into stdout at the end of the spawn command came from user robertklep
 found out about res.download() here from user Jossef Harush:  http://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
+
+
+found out about writing to /tmp on heroku from here, users David S and Austin Pocus http://stackoverflow.com/questions/12416738/how-to-use-herokus-ephemeral-filesystem
 */
+
+
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
@@ -140,9 +145,9 @@ var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
   var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
    '--db', 'duttonportal', '-c', 'volunteers',
   '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',
-  '--fields', 'name,email', '--out', '$HOME/tmp/specificJobOutput.csv']);
+  '--fields', 'name,email', '--out', '/tmp/specificJobOutput.csv']);
 console.log('after spawn');
-res.download('$HOME/tmp/specificJobOutput.csv');
+res.download('/tmp/specificJobOutput.csv');
 // res.json(200);
 });
 
