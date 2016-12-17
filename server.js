@@ -165,7 +165,7 @@ var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
 var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
  '--db', 'duttonportal', '-c', 'volunteers',
 '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-'--fields', 'name,email', '--out', 'specificJobOutput.csv']);
+'--fields', 'name,email', '--out', '/app/specificJobOutput.csv']);
 console.log('after spawn');
 res.download(__dirname+'/'+ 'specificJobOutput.csv');//http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file, user AmirtharajCVijay
 // res.send(mongoExportVolunteersJob);
