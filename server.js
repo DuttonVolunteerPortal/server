@@ -7,7 +7,6 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
 var spawnSync = require('child_process').spawnSync;
-var password = "bjarne";
 var APP_PATH = path.join(__dirname, 'dist');
 
 /*
@@ -151,7 +150,7 @@ app.listen(app.get('port'), function() {
   console.log('Server started: http://localhost:' + app.get('port') + '/');
 });
 
-MongoClient.connect('mongodb://cs336:' + password + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
+MongoClient.connect('mongodb://cs336:' + process.env.PASSWORD + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
   if (err) { throw err; }
   db = dbConnection;
 });
