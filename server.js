@@ -6,7 +6,7 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
-var spawnSync = require('spawn-sync');
+var spawn = require('child_process').spawn;
 var APP_PATH = path.join(__dirname, 'dist');
 
 /*
@@ -148,12 +148,12 @@ app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
 var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
-  var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
+var mongoExportVolunteersJob =  spawn('mongoexport', ['-h', 'ds111788.mlab.com:11788',
    '--db', 'duttonportal', '-c', 'volunteers',
   '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-  '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
+  '--fields', 'name,email']).stdout.pipe(res);
 console.log('after spawn');
-res.download('specificJobOutput.csv');
+// res.send(mongoExportVolunteersJob);
 // res.json(200);
 });
 
