@@ -141,12 +141,16 @@ found out about res.download() here from user Jossef Harush:  http://stackoverfl
 
 found out about writing to /tmp on heroku from here, users David S and Austin Pocus http://stackoverflow.com/questions/12416738/how-to-use-herokus-ephemeral-filesystem
 COPIED CODE FOR CREATING A FOLDER from here, user Louis:  http://stackoverflow.com/questions/22664654/unable-to-read-a-saved-file-in-heroku
+
+
+idea for using __dirname came from user loganfsmyth  http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
+
 */
 
 
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 
-var exportDir = path.join(process.cwd(), '/exportTemp/');
+var exportDir = path.join(__dirname, '/exportTemp/');
 if(!fs.existsSync(exportDir)) {
   fs.mkdirSync(exportDir);
 }
@@ -161,9 +165,9 @@ var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
 var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
  '--db', 'duttonportal', '-c', 'volunteers',
 '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-'--fields', 'name,email', '--out', filename]);
+'--fields', 'name,email', '--out', 'specificJobOutput.csv']);
 console.log('after spawn');
-res.download(filename);
+res.download(__dirname+'/'+ 'specificJobOutput.csv');//http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file, user AmirtharajCVijay
 // res.send(mongoExportVolunteersJob);
 // res.json(200);
 });
