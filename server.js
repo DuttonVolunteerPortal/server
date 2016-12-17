@@ -6,8 +6,7 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
-var spawnSync = require('child_process').spawnSync;
-var password = "bjarne";
+var execFileSync = require('child_process').execFileSync;
 var APP_PATH = path.join(__dirname, 'dist');
 
 /*
@@ -30,6 +29,13 @@ app.use(function(req, res, next) {
   res.setHeader('Cache-Control', 'no-cache');
   next();
 });
+
+
+MongoClient.connect('mongodb://cs336:' + process.env.MONGO_PASSWORD + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
+  if (err) { throw err; }
+  db = dbConnection;
+});
+
 
 app.get('/api/jobs', function(req, res) {
   db.collection("job").find({}).toArray(function(err, docs) {
@@ -142,12 +148,12 @@ app.get('/api/export/specificJob/:jobName', function(req, res) {
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
 var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
-  var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
+  var mongoExportVolunteersJob = execFileSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
    '--db', 'duttonportal', '-c', 'volunteers',
-  '-u', 'cs336', '-p', password, '-q', queryString, '--type=csv',
-  '--fields', 'name,email', '--out', '/tmp/specificJobOutput.csv']);
+  '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
+  '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
 console.log('after spawn');
-res.download('/tmp/specificJobOutput.csv');
+res.download('specificJobOutput.csv');
 // res.json(200);
 });
 
@@ -155,9 +161,4 @@ app.use('*', express.static(APP_PATH));
 
 app.listen(app.get('port'), function() {
   console.log('Server started: http://localhost:' + app.get('port') + '/');
-});
-
-MongoClient.connect('mongodb://cs336:' + password + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
-  if (err) { throw err; }
-  db = dbConnection;
 });
