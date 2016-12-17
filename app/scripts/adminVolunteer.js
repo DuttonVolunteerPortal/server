@@ -8,7 +8,6 @@ module.exports = React.createClass({
       jobToRemove: "",
       name: ""
     };
-    console.log(this.props)
     data.name = this.props.name;
     this.props.removeVolunteer(data)
   },
