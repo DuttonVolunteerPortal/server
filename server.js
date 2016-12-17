@@ -150,14 +150,14 @@ idea for using __dirname came from user loganfsmyth  http://stackoverflow.com/qu
 
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 
-var exportDir = path.join(__dirname, '/exportTemp/');
-if(!fs.existsSync(exportDir)) {
-  fs.mkdirSync(exportDir);
+// var exportDir = path.join(__dirname, '/exportTemp/');
+if(!fs.existsSync('./temp')) {
+  fs.mkdirSync('./temp');
 }
 
 
-var filename = exportDir + 'specificJobOutput.csv';
-console.log(filename);
+// var filename = exportDir + 'specificJobOutput.csv';
+// console.log(filename);
 
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
@@ -165,9 +165,9 @@ var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
 var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
  '--db', 'duttonportal', '-c', 'volunteers',
 '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-'--fields', 'name,email', '--out', 'specificJobOutput.csv']);
+'--fields', 'name,email', '--out', './temp/specificJobOutput.csv']);
 console.log('after spawn');
-res.download(__dirname+'/'+ 'specificJobOutput.csv');//http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file, user AmirtharajCVijay
+res.download('./temp/specificJobOutput.csv');//http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file, user AmirtharajCVijay
 // res.send(mongoExportVolunteersJob);
 // res.json(200);
 });
