@@ -133,13 +133,7 @@ app.put('/api/business', function(req, res) {
   });
 })
 
-//export all the email addresses of people who signed up for a certain job.
-app.get('/api/exportemail/:jobName', function(req, res) {
-  db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }).toArray(function(err, docs) {
-    assert.equal(err, null);
-    res.json(docs);
-  });
-});
+
 
 
 
