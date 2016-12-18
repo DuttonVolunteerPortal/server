@@ -6,7 +6,8 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
-var child_process = require('child_process');
+var json2csv = require('json2csv');
+// var child_process = require('child_process');
 var APP_PATH = path.join(__dirname, 'dist');
 
 /*
@@ -133,9 +134,18 @@ app.put('/api/business', function(req, res) {
   });
 })
 
+/*get the list of contact information as a CSV file for all the people who signed up for a certain job
+
+https://www.npmjs.com/package/json2csv
+
+*/
+app.get('/api/export/specificJob/:jobName', function(req, res) {
+  db.collection("volunteers").find({ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }).toArray(function(err, docs) {
+//json2csv code goes here
 
 
-
+  });
+});
 
 /*get the list of contact information as a CSV file for all the people who signed up for a certain job*/
 
