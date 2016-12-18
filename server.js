@@ -152,24 +152,22 @@ idea for using '.' or  __dirname came from user loganfsmyth  http://stackoverflo
 */
 
 
-app.get('/api/export/specificJob/:jobName', function(req, res) {
-
-console.log("going to spawn process now");
-// jobNameArray.push(req.params.jobName);
-var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
-var mongoExportVolunteersJob = child_process.spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
- '--db', 'duttonportal', '-c', 'volunteers',
-'-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-'--fields', 'name,email', '--out', 'specificJobOutput.csv']);
-console.log('after spawn');
-console.log(process.env.PWD);
-console.log(__dirname);
-var outputLocation = process.env.PWD + '/specificJobOutput.csv';//  found process.env.PWD from Rahat Mahbub: http://stackoverflow.com/questions/31527462/error-enoent-stat-app-public-views-index-html-in-heroku
-
-res.download(outputLocation);
-// res.send(mongoExportVolunteersJob);
-// res.json(200);
-});
+// app.get('/api/export/specificJob/:jobName', function(req, res) {
+//
+// console.log("going to spawn process now");
+// // jobNameArray.push(req.params.jobName);
+// var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
+// var mongoExportVolunteersJob = child_process.spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
+//  '--db', 'duttonportal', '-c', 'volunteers',
+// '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
+// '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
+// console.log('after spawn');
+// console.log(process.env.PWD);
+// console.log(__dirname);
+// var outputLocation = process.env.PWD + '/specificJobOutput.csv';//  found process.env.PWD from Rahat Mahbub: http://stackoverflow.com/questions/31527462/error-enoent-stat-app-public-views-index-html-in-heroku
+//
+// res.download(outputLocation);
+// });
 
 app.use('*', express.static(APP_PATH));
 
