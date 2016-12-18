@@ -100,6 +100,17 @@ app.put('/api/jobs/:id', function(req, res) {
           db.collection("job").updateOne({"title" : job.title}, job)
         }
       })
+
+      //now remove from the volunteer collection
+      db.collection("volunteers").find({"name" : req.params.name}).toArray(function(err, volunteers) {
+        for (v of volunteers) {
+          var index = v.jobsDesired.indexOf(req.params.jobToRemove)
+          if (index > -1) {
+            v.jobsDesired.splice(index, 1);
+          }
+          db.collection("volunteers").updateOne({"name" : v.name}, v)
+        }
+      })
       res.json(200)
     });
 
