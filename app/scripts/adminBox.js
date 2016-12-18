@@ -11,6 +11,7 @@ import {API_URL, API_URL2, POLL_INTERVAL} from './global';
 
 module.exports = React.createClass({
 
+  // Get the initial state of this React class
   getInitialState: function(){
     return {data: []};
   },
@@ -49,32 +50,26 @@ module.exports = React.createClass({
       }.bind(this));
   },
 
-    // Called automatically by React after a component is rendered for the first time
-    componentDidMount: function() {
-        this.loadJobsFromServer();
-        setInterval(this.loadJobsFromServer, POLL_INTERVAL);
-    },
+  // Called automatically by React after a component is rendered for the first time
+  componentDidMount: function() {
+      this.loadJobsFromServer();
+      setInterval(this.loadJobsFromServer, POLL_INTERVAL);
+  },
 
-    removeVolunteer: function(e) {
-      //send in two pieces of data
-      /*
-        e = {
-          jobToRemove: ''
-          name: ''
-        }
-      */
-      var newURL = API_URL + '/' + e.jobToRemove + '/' + e.name;
-      $.ajax({
-        url: newURL,
-        type: 'DELETE',
-      })
-        .done(function(data){
-        }.bind(this))
-        .fail(function(xhr, status, err) {
-          console.error(this.props.url, status, err.toString());
-        }.bind(this));
-    },
+  removeVolunteer: function(e) {
+    var newURL = API_URL + '/' + e.jobToRemove + '/' + e.name;
+    $.ajax({
+      url: newURL,
+      type: 'DELETE',
+    })
+      .done(function(data){
+      }.bind(this))
+      .fail(function(xhr, status, err) {
+        console.error(this.props.url, status, err.toString());
+      }.bind(this));
+  },
 
+  // Render method for this React class
   render: function() {
     return (
       <div className={styles.adminBox}>

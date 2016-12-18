@@ -7,6 +7,8 @@ import Job from './adminVolunteerJob.js';
 import styles from '../css/base.css';
 
 module.exports = React.createClass({
+
+  // Render method for this React class
   render: function() {
     var removeVolunteer = this.props.removeVolunteer
     var volunteerJobNodes = this.props.data.map(function(volunteerJob) {

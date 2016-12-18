@@ -1,3 +1,10 @@
+/*
+ * base.css adds CSS style to the Volunteering @ Dutton Christian Admin website page
+ *      Created by: Ethan Clark, Ben Kastner, Mitch Stark, Kyle Reitsma
+ *      Fall 2016 @ Calvin College
+ *      CS 336 Final Project
+ */
+
 body {
     background: #d3d3d3;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -156,4 +163,45 @@ footer {
   justify-content: center;
   margin: 0 auto;
   width: 400px;
+}
+
+.removeVolunteer {
+    display: flex;
+    flex-flow: row;
+}
+
+.volunteerNode {
+    order: 1;
+    flex: 1 1 75%;
+}
+
+.removeButton {
+    order: 2;
+    flex: 1 1 25%;
+    padding-top: 10px;
+}
+
+.jobTitle {
+    padding-left: 0px;
+}
+
+.businessTitle {
+    padding-left: 0px;
+}
+
+.italicizeElements {
+    font-style: italic;
+}
+
+@media all and (max-width: 1050px) {
+    .adminBox {
+        flex-direction: column;
+    }
+
+    .businessList,
+    .adminJobList,
+    .adminJobForm {
+        min-height: auto;
+        max-height: auto;
+    }
 }

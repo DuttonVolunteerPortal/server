@@ -9,12 +9,14 @@ import VolunteerList from './adminVolunteers.js'
 
 module.exports = React.createClass({
 
-   rawMarkup: function() {
+  // rawMarkup function for the volunteering job description
+  rawMarkup: function() {
     var md = new Remarkable({html: true});
     var rawMarkup = md.render(this.props.children.toString());
     return { __html: rawMarkup };
   },
 
+  // Handle submit for the CSV file export
   handleSubmit: function(e) {
     e.preventDefault();
     var jobToExport = this.props.title.trim();
@@ -26,17 +28,21 @@ module.exports = React.createClass({
     console.log(jobToExport);
     this.setState({jobToExport: ''});
   },
+
+  // Method to call the props removeVolunteer method when the remove button is pressed for a volunteer
   removeVolunteer: function(e) {
     e.jobToRemove = this.props.title
     this.props.removeVolunteer(e)
   },
+
+  // Render method for this React class
   render: function() {
     return (
       <div className="job">
-        <h2 className="jobTitle">
+        <h2 className={styles.jobTitle}>
           {this.props.title}
         </h2>
-        <span dangerouslySetInnerHTML={this.rawMarkup()} />
+        <span className={styles.italicizeElements} dangerouslySetInnerHTML={this.rawMarkup()} />
         <Link to={'/' + this.props.id}>Edit</Link>
         <div className={styles.accordionContainer}>
           <Collapsible classParentString={styles.accordion} trigger="Click to see volunteers" triggerWhenOpen="Click to hide volunteers">
