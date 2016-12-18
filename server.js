@@ -6,7 +6,7 @@ var app = express();
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var db;
-var spawnSync = require('child_process').spawnSync;
+var child_process = require('child_process');
 var APP_PATH = path.join(__dirname, 'dist');
 
 /*
@@ -133,6 +133,16 @@ app.put('/api/business', function(req, res) {
   });
 })
 
+//export all the email addresses of people who signed up for a certain job.
+app.get('/api/exportemail/:jobName', function(req, res) {
+  db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }).toArray(function(err, docs) {
+    assert.equal(err, null);
+    res.json(docs);
+  });
+});
+
+
+
 /*get the list of contact information as a CSV file for all the people who signed up for a certain job*/
 
 /*code for spawning process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
@@ -143,31 +153,24 @@ found out about writing to /tmp on heroku from here, users David S and Austin Po
 COPIED CODE FOR CREATING A FOLDER from here, user Louis:  http://stackoverflow.com/questions/22664654/unable-to-read-a-saved-file-in-heroku
 
 
-idea for using __dirname came from user loganfsmyth  http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
+idea for using '.' or  __dirname came from user loganfsmyth  http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
 
 */
 
 
 app.get('/api/export/specificJob/:jobName', function(req, res) {
 
-// var exportDir = path.join(__dirname, '/exportTemp/');
-if(!fs.existsSync('./temp')) {
-  fs.mkdirSync('./temp');
-}
-
-
-// var filename = exportDir + 'specificJobOutput.csv';
-// console.log(filename);
-
 console.log("going to spawn process now");
 // jobNameArray.push(req.params.jobName);
 var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
-var mongoExportVolunteersJob = spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
+var mongoExportVolunteersJob = child_process.spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
  '--db', 'duttonportal', '-c', 'volunteers',
 '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-'--fields', 'name,email', '--out', './temp/specificJobOutput.csv']);
+'--fields', 'name,email', '--out', 'specificJobOutput.csv']);
 console.log('after spawn');
-res.download('./temp/specificJobOutput.csv');//http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file, user AmirtharajCVijay
+var outputLocation = process.env.PWD + 'specificJobOutput.csv';//  found process.env.PWD from Rahat Mahbub: http://stackoverflow.com/questions/31527462/error-enoent-stat-app-public-views-index-html-in-heroku
+
+res.download(outputLocation);
 // res.send(mongoExportVolunteersJob);
 // res.json(200);
 });
