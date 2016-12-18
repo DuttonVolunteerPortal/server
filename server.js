@@ -133,6 +133,17 @@ app.put('/api/business', function(req, res) {
   });
 })
 
+
+
+//export all the email addresses of people who signed up for a certain job.
+app.get('/api/exportemail/:jobName', function(req, res) {
+  db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }, {email: 1, _id: 0}).toArray(function(err, docs) {
+    assert.equal(err, null);
+        res.json(docs);
+  });
+});
+
+
 /*get the list of contact information as a CSV file for all the people who signed up for a certain job*/
 
 /*code for spawning process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
