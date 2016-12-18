@@ -31,13 +31,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-
-MongoClient.connect('mongodb://cs336:' + process.env.MONGO_PASSWORD + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
-  if (err) { throw err; }
-  db = dbConnection;
-});
-
-
 app.get('/api/jobs', function(req, res) {
   db.collection("job").find({}).toArray(function(err, docs) {
     assert.equal(err, null);
@@ -161,6 +154,7 @@ app.put('/api/jobs/:id', function(req, res) {
 
     idea for using '.' or  __dirname came from user loganfsmyth  http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
 
+<<<<<<< HEAD
     */
 
 
@@ -186,3 +180,7 @@ app.put('/api/jobs/:id', function(req, res) {
     app.listen(app.get('port'), function() {
       console.log('Server started: http://localhost:' + app.get('port') + '/');
     });
+MongoClient.connect('mongodb://cs336:' + process.env.PASSWORD + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
+  if (err) { throw err; }
+  db = dbConnection;
+});
