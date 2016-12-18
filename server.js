@@ -139,13 +139,11 @@ app.put('/api/jobs/:id', function(req, res) {
     */
     app.get('/api/export/specificJob/:jobName', function(req, res) {
       db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }).toArray(function(err, volunteers) {
-        //json2csv code goes here
         var fields = ['name','email'];
         var csv = json2csv({data: volunteers, fields: fields});
         fs.writeFile('specificJobOutput.csv', csv, function(err){
           if (err) throw err;
           console.log("Saved file");
-          console.log(volunteers);
           res.download('specificJobOutput.csv');
         });
       });
