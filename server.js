@@ -87,17 +87,26 @@ app.put('/api/jobs/:id', function(req, res) {
   });
 
 // Route to delete a job by its ID number
-app.delete('/api/jobs/:id', function(req, res) {
-  db.collection("job").deleteOne(
-    {'id': Number(req.params.id)},
-    function(err, result) {
+app.delete('/api/jobs/:id/:title', function(req, res) {
+
+  db.collection("volunteers").find({}).toArray(function(err, volunteers) {
+    for (v of volunteers) {
+      var index = v.jobsDesired.indexOf(req.params.title);
+      if (index > -1) {
+        v.jobsDesired.splice(index, 1);
+      }
+      db.collection("volunteers").updateOne({"name": v.name}, v);
+    }
+  });
+
+  db.collection("job").deleteOne({'id': Number(req.params.id)}, function(err, result) {
       if (err) throw err;
       db.collection("job").find({}).toArray(function(err, docs) {
         if (err) throw err;
         res.json(docs);
       });
-    });
   });
+});
 
 //Route to remove a volunteer from a job
 app.delete('/api/jobs/:jobToRemove/:name', function(req, res) {
@@ -149,7 +158,21 @@ app.get('/api/export/specificJob/:jobName', function(req, res) {
   });
 });
 
-/*get the list of contact information as a CSV file for all the people who signed up for a certain job*/
+/*
+ * Route to get the list of businesses as a CSV file
+ * https://www.npmjs.com/package/json2csv
+ */
+ app.get('/api/export/businesses', function(req, res) {
+  db.collection("business").find({}).toArray(function(err, businesses) {
+    var fields = ['owner_name', 'email', 'businessDescription'];
+    var csv = json2csv({data: businesses, fields: fields});
+    fs.writeFile('BusinessOutput.csv', csv, function(err) {
+      if (err) throw err;
+      console.log("Saved file");
+      res.download('BusinessOutput.csv');
+    });
+  });
+ });
 
 /*code for spawning process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
 The code for piping into stdout at the end of the spawn command came from user robertklep
@@ -160,23 +183,6 @@ COPIED CODE FOR CREATING A FOLDER from here, user Louis:  http://stackoverflow.c
 
 idea for using '.' or  __dirname came from user loganfsmyth  http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
 */
-
-// app.get('/api/export/specificJob/:jobName', function(req, res) {
-//
-// console.log("going to spawn process now");
-// // jobNameArray.push(req.params.jobName);
-// var queryString = '{ jobsDesired: { $in: ["'+ req.params.jobName +'"] } }';
-// var mongoExportVolunteersJob = child_process.spawnSync('mongoexport', ['-h', 'ds111788.mlab.com:11788',
-//  '--db', 'duttonportal', '-c', 'volunteers',
-// '-u', 'cs336', '-p', process.env.MONGO_PASSWORD, '-q', queryString, '--type=csv',
-// '--fields', 'name,email', '--out', 'specificJobOutput.csv']);
-// console.log('after spawn');
-// console.log(process.env.PWD);
-// console.log(__dirname);
-// var outputLocation = process.env.PWD + '/specificJobOutput.csv';//  found process.env.PWD from Rahat Mahbub: http://stackoverflow.com/questions/31527462/error-enoent-stat-app-public-views-index-html-in-heroku
-//
-// res.download(outputLocation);
-// });
 
 // Use * to get all bad urls and set it to the home page
 app.use('*', express.static(APP_PATH));
