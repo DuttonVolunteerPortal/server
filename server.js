@@ -88,7 +88,6 @@ app.put('/api/jobs/:id', function(req, res) {
 
 // Route to delete a job by its ID number
 app.delete('/api/jobs/:id/:title', function(req, res) {
-
   db.collection("volunteers").find({}).toArray(function(err, volunteers) {
     for (v of volunteers) {
       var index = v.jobsDesired.indexOf(req.params.title);
@@ -109,7 +108,7 @@ app.delete('/api/jobs/:id/:title', function(req, res) {
 });
 
 //Route to remove a volunteer from a job
-app.delete('/api/jobs/:jobToRemove/:name', function(req, res) {
+app.delete('/api/jobs/volunteer/:jobToRemove/:name', function(req, res) {
   db.collection("job").find({"title" : req.params.jobToRemove}).toArray(function(err, jobs) {
     //only one job to find
     for (job of jobs) {
