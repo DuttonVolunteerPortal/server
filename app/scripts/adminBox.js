@@ -57,7 +57,7 @@ module.exports = React.createClass({
   },
 
   removeVolunteer: function(e) {
-    var newURL = API_URL + '/' + e.jobToRemove + '/' + e.name;
+    var newURL = API_URL + '/volunteer/' + e.jobToRemove + '/' + e.name;
     $.ajax({
       url: newURL,
       type: 'DELETE',
