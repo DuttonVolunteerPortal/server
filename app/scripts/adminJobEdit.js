@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import $ from 'jquery';
 
+import styles from '../css/base.css';
+
 import {API_URL, POLL_INTERVAL} from './global';
 
 module.exports = React.createClass({
@@ -25,7 +27,7 @@ module.exports = React.createClass({
 
     // Load data for an individual job
     loadData: function() {
-        $.ajax(API_URL + "/" + this.props.params.id) .done(function(jobs) {
+        $.ajax(API_URL + "/" + this.props.params.id).done(function(jobs) {
             this.setState(jobs[0]);
         }.bind(this));
     },
@@ -68,8 +70,9 @@ module.exports = React.createClass({
 
     // AJAX call to server to delete a job from the MongoDB
     handleDelete: function() {
+        var temp_url = API_URL + "/" + this.props.params.id + "/" + this.state.title;
         $.ajax({
-            url: API_URL + "/" + this.props.params.id,
+            url: temp_url,
             type: 'DELETE'
         })
          .done(function(jobs){
@@ -83,9 +86,9 @@ module.exports = React.createClass({
     // Render method for this React class
     render: function() {
         return (
-            <div>
+            <div className={styles.jobFormDiv}>
                 <form className="jobForm">
-                    <h1>Job Edit - {this.state.id}</h1>
+                    <h1>Job Edit - #{this.state.id}</h1>
                     <input
                         type="text"
                         value={this.state.title}

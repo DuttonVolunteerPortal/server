@@ -30,6 +30,13 @@ module.exports = React.createClass({
       }.bind(this));
   },
 
+  // Handle submit for the CSV file export
+  handleSubmit: function(e) {
+    e.preventDefault();
+    console.log("Handling submit");
+    window.location =  '/api/export/businesses';
+  },
+
   // Called automatically by React after a component is rendered for the first time
   componentDidMount: function() {
       this.loadBusinessesFromServer();
@@ -49,6 +56,9 @@ module.exports = React.createClass({
     <div className={styles.businessList}>
       <h2 className={styles.ListHeader}>Business List</h2>
       {businessNodes}
+      <form className={styles.BusinessExportForm} onSubmit={this.handleSubmit}>
+          <input type="submit" value="Export Business List" />
+      </form>
     </div>
     );
   }
