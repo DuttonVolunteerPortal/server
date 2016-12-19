@@ -192,7 +192,7 @@ app.listen(app.get('port'), function() {
 });
 
 // Get connection to the MongoDB where all the data is stored
-MongoClient.connect('mongodb://cs336:' + 'bjarne' + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
+MongoClient.connect('mongodb://cs336:' + process.env.PASSWORD + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
   if (err) { throw err; }
   db = dbConnection;
 });
