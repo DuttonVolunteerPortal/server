@@ -51,7 +51,7 @@ module.exports = React.createClass({
           value={this.state.volunteer_description}
           onChange={this.handleDescriptionChange}
         />
-        <input type="submit" value="Post" />
+        <input type="submit" value="Create" />
       </form>
       </div>
     );
