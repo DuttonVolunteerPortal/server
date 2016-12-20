@@ -173,16 +173,6 @@ app.get('/api/export/specificJob/:jobName', function(req, res) {
   });
  });
 
-/*code for spawning process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
-The code for piping into stdout at the end of the spawn command came from user robertklep
-found out about res.download() here from user Jossef Harush:  http://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
-
-found out about writing to /tmp on heroku from here, users David S and Austin Pocus http://stackoverflow.com/questions/12416738/how-to-use-herokus-ephemeral-filesystem
-COPIED CODE FOR CREATING A FOLDER from here, user Louis:  http://stackoverflow.com/questions/22664654/unable-to-read-a-saved-file-in-heroku
-
-idea for using '.' or  __dirname came from user loganfsmyth  http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
-*/
-
 // Use * to get all bad urls and set it to the home page
 app.use('*', express.static(APP_PATH));
 
