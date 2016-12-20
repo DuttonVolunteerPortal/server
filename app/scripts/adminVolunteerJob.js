@@ -24,7 +24,7 @@ module.exports = React.createClass({
     if (!jobToExport) {
       return;
     }
-    window.location =  '/api/export/specificJob' + "/" + jobToExport;//read somewhere on stackoverlfow that you can't download a file using ajax for security reasons, so I think someone suggested using window.location.  sorry I don't have the url.
+    window.location =  '/api/export/specificJob' + "/" + jobToExport;//read  on stackoverlfow that you can't download a file using ajax for security reasons, so I think someone suggested using window.location.  from user bluish:  http://stackoverflow.com/questions/4545311/download-a-file-by-jquery-ajax
     console.log(jobToExport);
     this.setState({jobToExport: ''});
   },
