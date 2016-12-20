@@ -1,9 +1,9 @@
 /*
- * server.js runs the web server for the Dutton Christian School Volunteering Administrator View
- *    Created by: Ethan Clark, Ben Kastner, Mitch Stark, Kyle Reitsma
- *    Fall 2016 @ Calvin College
- *    CS 336 Final Project
- */
+* server.js runs the web server for the Dutton Christian School Volunteering Administrator View
+*    Created by: Ethan Clark, Ben Kastner, Mitch Stark, Kyle Reitsma
+*    Fall 2016 @ Calvin College
+*    CS 336 Final Project
+*/
 
 // Create variables from the Node requires/dependencies
 var fs = require('fs');
@@ -86,113 +86,126 @@ app.put('/api/jobs/:id', function(req, res) {
     });
   });
 
-// Route to delete a job by its ID number
-app.delete('/api/jobs/:id/:title', function(req, res) {
-  db.collection("volunteers").find({}).toArray(function(err, volunteers) {
-    for (v of volunteers) {
-      var index = v.jobsDesired.indexOf(req.params.title);
-      if (index > -1) {
-        v.jobsDesired.splice(index, 1);
+  // Route to delete a job by its ID number
+  app.delete('/api/jobs/:id/:title', function(req, res) {
+    db.collection("volunteers").find({}).toArray(function(err, volunteers) {
+      for (v of volunteers) {
+        var index = v.jobsDesired.indexOf(req.params.title);
+        if (index > -1) {
+          v.jobsDesired.splice(index, 1);
+        }
+        db.collection("volunteers").updateOne({"name": v.name}, v);
       }
-      db.collection("volunteers").updateOne({"name": v.name}, v);
-    }
-  });
+    });
 
-  db.collection("job").deleteOne({'id': Number(req.params.id)}, function(err, result) {
+    db.collection("job").deleteOne({'id': Number(req.params.id)}, function(err, result) {
       if (err) throw err;
       db.collection("job").find({}).toArray(function(err, docs) {
         if (err) throw err;
         res.json(docs);
       });
-  });
-});
-
-//Route to remove a volunteer from a job
-app.delete('/api/jobs/volunteer/:jobToRemove/:name', function(req, res) {
-  db.collection("job").find({"title" : req.params.jobToRemove}).toArray(function(err, jobs) {
-    //only one job to find
-    for (job of jobs) {
-      var index = job.workers.indexOf(req.params.name)
-      if (index > -1) {
-        job.workers.splice(index, 1);
-      }
-      db.collection("job").updateOne({"title" : job.title}, job)
-    }
-  });
-
-  //now remove from the volunteer collection
-  db.collection("volunteers").find({"name" : req.params.name}).toArray(function(err, volunteers) {
-    for (v of volunteers) {
-      var index = v.jobsDesired.indexOf(req.params.jobToRemove)
-      if (index > -1) {
-        v.jobsDesired.splice(index, 1);
-      }
-      db.collection("volunteers").updateOne({"name" : v.name}, v)
-    }
-  })
-  res.json(200)
-});
-
-// Route to get all the businesses from the server
-app.get('/api/business', function(req, res) {
-  db.collection("business").find({}).toArray(function(err, docs) {
-    assert.equal(err, null);
-    res.json(docs);
-  });
-});
-
-/*
- * Route to get the list of contact information as a CSV file for all the people who signed up for a certain job
- * https://www.npmjs.com/package/json2csv
- */
-app.get('/api/export/specificJob/:jobName', function(req, res) {
-  db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }).toArray(function(err, volunteers) {
-    var fields = ['name','email'];
-    var csv = json2csv({data: volunteers, fields: fields});
-    fs.writeFile('specificJobOutput.csv', csv, function(err){
-      if (err) throw err;
-      console.log("Saved file");
-      res.download('specificJobOutput.csv');
     });
   });
-});
 
-/*
- * Route to get the list of businesses as a CSV file
- * https://www.npmjs.com/package/json2csv
- */
- app.get('/api/export/businesses', function(req, res) {
-  db.collection("business").find({}).toArray(function(err, businesses) {
-    var fields = ['owner_name', 'email', 'businessDescription'];
-    var csv = json2csv({data: businesses, fields: fields});
-    fs.writeFile('BusinessOutput.csv', csv, function(err) {
-      if (err) throw err;
-      console.log("Saved file");
-      res.download('BusinessOutput.csv');
+  //Route to remove a volunteer from a job
+  app.delete('/api/jobs/volunteer/:jobToRemove/:name', function(req, res) {
+    db.collection("job").find({"title" : req.params.jobToRemove}).toArray(function(err, jobs) {
+      //only one job to find
+      for (job of jobs) {
+        var index = job.workers.indexOf(req.params.name)
+        if (index > -1) {
+          job.workers.splice(index, 1);
+        }
+        db.collection("job").updateOne({"title" : job.title}, job)
+      }
+    });
+
+    //now remove from the volunteer collection
+    db.collection("volunteers").find({"name" : req.params.name}).toArray(function(err, volunteers) {
+      for (v of volunteers) {
+        var index = v.jobsDesired.indexOf(req.params.jobToRemove)
+        if (index > -1) {
+          v.jobsDesired.splice(index, 1);
+        }
+        db.collection("volunteers").updateOne({"name" : v.name}, v)
+      }
+    })
+    res.json(200)
+  });
+
+  // Route to get all the businesses from the server
+  app.get('/api/business', function(req, res) {
+    db.collection("business").find({}).toArray(function(err, docs) {
+      assert.equal(err, null);
+      res.json(docs);
     });
   });
- });
 
-/*code for spawning process here:    http://stackoverflow.com/questions/20176232/mongoexport-with-parameters-node-js-child-process, from user "Ben".
-The code for piping into stdout at the end of the spawn command came from user robertklep
-found out about res.download() here from user Jossef Harush:  http://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
+  /*
+  * Route to get the list of contact information as a CSV file for all the people who signed up for a certain job
+  * https://www.npmjs.com/package/json2csv
+  */
+  app.get('/api/export/specificJob/:jobName', function(req, res) {
+    db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }).toArray(function(err, volunteers) {
+      var fields = ['name','email'];
+      var csv = json2csv({data: volunteers, fields: fields});
+      fs.writeFile('specificJobOutput.csv', csv, function(err){
+        if (err) throw err;
+        console.log("Saved file");
+        res.download('specificJobOutput.csv');
+      });
+    });
+  });
 
-found out about writing to /tmp on heroku from here, users David S and Austin Pocus http://stackoverflow.com/questions/12416738/how-to-use-herokus-ephemeral-filesystem
-COPIED CODE FOR CREATING A FOLDER from here, user Louis:  http://stackoverflow.com/questions/22664654/unable-to-read-a-saved-file-in-heroku
+  /*
+  * Route to get the list of businesses as a CSV file
+  * https://www.npmjs.com/package/json2csv
+  */
+  app.get('/api/export/businesses', function(req, res) {
+    db.collection("business").find({}).toArray(function(err, businesses) {
+      var fields = ['owner_name', 'email', 'businessDescription'];
+      var csv = json2csv({data: businesses, fields: fields});
+      fs.writeFile('BusinessOutput.csv', csv, function(err) {
+        if (err) throw err;
+        console.log("Saved file");
+        res.download('BusinessOutput.csv');
+      });
+    });
+  });
 
-idea for using '.' or  __dirname came from user loganfsmyth  http://stackoverflow.com/questions/13541948/node-js-cant-open-files-error-enoent-stat-path-to-file
-*/
+  /*
+  * Route to get the email addresses of volutneers for a certain job and format them into a string that can then be uses for mailto
+  * https://www.npmjs.com/package/json2csv
+  */
+  app.get('/api/email/specificJob/:jobName', function(req, res) {
+    db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }, {email: 1}).toArray(function(err, volunteers) {
+      console.log(volunteers[0].email);
+      // console.log(JSON.parse(volunteers));
+      // res.send(JSON.parse(volunteers));
+var addresses = '';
+      for (var i=0; i< volunteers.length; i++) {
+        addresses = addresses + volunteers[i].email;
+        if (i != volunteers.length - 1) {//add semeicolon and space to separate email addresses
+          addresses = addresses + '; ';
+        }
+      }
+      console.log(addresses);
+      res.send(addresses);
 
-// Use * to get all bad urls and set it to the home page
-app.use('*', express.static(APP_PATH));
+    });
+  });
 
-// Show that the application is listening on localhost port 3000
-app.listen(app.get('port'), function() {
-  console.log('Server started: http://localhost:' + app.get('port') + '/');
-});
 
-// Get connection to the MongoDB where all the data is stored
-MongoClient.connect('mongodb://cs336:' + process.env.PASSWORD + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
-  if (err) { throw err; }
-  db = dbConnection;
-});
+  // Use * to get all bad urls and set it to the home page
+  app.use('*', express.static(APP_PATH));
+
+  // Show that the application is listening on localhost port 3000
+  app.listen(app.get('port'), function() {
+    console.log('Server started: http://localhost:' + app.get('port') + '/');
+  });
+
+  // Get connection to the MongoDB where all the data is stored
+  MongoClient.connect('mongodb://cs336:' + process.env.PASSWORD + '@ds111788.mlab.com:11788/duttonportal', function (err, dbConnection) {
+    if (err) { throw err; }
+    db = dbConnection;
+  });
