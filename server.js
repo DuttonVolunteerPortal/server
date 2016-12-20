@@ -144,6 +144,7 @@ app.get('/api/business', function(req, res) {
 /*
  * Route to get the list of contact information as a CSV file for all the people who signed up for a certain job
  * https://www.npmjs.com/package/json2csv
+   found out about res.download() here from user Jossef Harush:  http://stackoverflow.com/questions/7288814/download-a-file-from-nodejs-server-using-express
  */
 app.get('/api/export/specificJob/:jobName', function(req, res) {
   db.collection("volunteers").find({ jobsDesired: { $in: [req.params.jobName] } }).toArray(function(err, volunteers) {
